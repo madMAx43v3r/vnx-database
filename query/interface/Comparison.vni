@@ -3,9 +3,13 @@ package vnx.query;
 import vnx.Variant;
 import vnx.Object;
 
-class NotNull extends Expression {
+class Comparison extends Expression {
 	
-	Expression* A;
+	op_type_e type;
+	
+	Expression* L;
+	Expression* R;
+	
 	
 	Variant execute(Object object) const;
 	

@@ -1,0 +1,18 @@
+package vnx.query;
+
+enum op_type_e {
+	
+	NOT,
+	IS_NULL,
+	NOT_NULL,
+	
+	AND,
+	OR,
+	EQUAL,
+	NOT_EQUAL,
+	LESS,
+	LESS_EQUAL,
+	GREATER,
+	GREATER_EQUAL
+	
+}

@@ -9,6 +9,7 @@ class Max extends Aggregate {
 	
 	Variant result;
 	
+	
 	void update(Object object);
 	
 	Variant get_result() const;

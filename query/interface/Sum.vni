@@ -9,6 +9,7 @@ class Sum extends Aggregate {
 	
 	double result = 0;
 	
+	
 	void update(Object object);
 	
 	Variant get_result() const;

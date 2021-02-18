@@ -3,9 +3,12 @@ package vnx.query;
 import vnx.Variant;
 import vnx.Object;
 
-class Not extends Expression {
+class Unary extends Expression {
 	
-	Expression* A;
+	op_type_e type;
+	
+	Expression* X;
+	
 	
 	Variant execute(Object object) const;
 	

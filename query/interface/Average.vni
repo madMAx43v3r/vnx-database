@@ -9,7 +9,8 @@ class Average extends Aggregate {
 	
 	double sum = 0;
 	
-	long count = 0;
+	ulong count = 0;
+	
 	
 	void update(Object object);
 	

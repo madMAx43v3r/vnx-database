@@ -7,6 +7,7 @@ class Value extends Expression {
 	
 	Variant data;
 	
+	
 	Variant execute(Object object) const;
 	
 	string as_string() const;
