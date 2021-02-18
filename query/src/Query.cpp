@@ -444,8 +444,8 @@ std::shared_ptr<Update> update(	const std::string& table,
 	return out;
 }
 
-std::shared_ptr<Delete> delete_(const std::string& from,
-								std::shared_ptr<const Expression> where)
+std::shared_ptr<Delete> delete_from(const std::string& from,
+									std::shared_ptr<const Expression> where)
 {
 	auto out = Delete::create();
 	out->from = from;

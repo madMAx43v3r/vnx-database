@@ -9,6 +9,8 @@ module Server {
 	
 	long block_size = 67108864;
 	
+	bool ignore_errors = false;			// if to ignore data corruption on load
+	
 	
 	vector<Object> select(vnx.query.Select query) const;
 	
@@ -39,7 +41,7 @@ module Server {
 	void truncate(string table);
 	
 	
-	map<string, Object> get_table_info() const;
+	vector<table_info_t> get_table_info() const;
 	
 	void write_new_block();
 	

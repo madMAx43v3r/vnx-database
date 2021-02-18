@@ -1,0 +1,9 @@
+package vnx.database;
+
+class Root {
+	
+	vector<string> tables;
+	
+	vector<string> blocks;
+	
+}

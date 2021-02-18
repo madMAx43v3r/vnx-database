@@ -39,9 +39,9 @@ protected:
 	
 	void insert_many(const std::string& table, const std::map<Hash128, Object>& objects) override;
 	
-	void update_one(const ::std::string& table, const Hash128& id, const Object& object) override;
+	void update_one(const std::string& table, const Hash128& id, const Object& object) override;
 	
-	void update_many(const ::std::string& table, const std::map<Hash128, Object>& objects) override;
+	void update_many(const std::string& table, const std::map<Hash128, Object>& objects) override;
 	
 	void delete_one(const std::string& table, const Hash128& id) override;
 	
@@ -49,16 +49,11 @@ protected:
 	
 	void truncate(const std::string& table) override;
 	
-	std::map<std::string, Object> get_table_info() const override;
+	std::vector<table_info_t> get_table_info() const override;
 	
 	void write_new_block() override;
 
 private:
-	struct block_t {
-		size_t index;
-		std::shared_ptr<vnx::File> file;
-	};
-	
 	struct table_t {
 		Hash128 hash;
 		std::shared_ptr<vnx::File> file;
@@ -69,27 +64,21 @@ private:
 	
 	const table_t& find_table(const std::string& name) const;
 	
-	Hash128 flip_hash(const table_t& table, const Hash128& hash) const;
+	bool insert_row(table_t& table, const Hash128& key);
 	
-	bool insert_key(table_t& table, const Hash128& key);
+	void insert_one(const vnx::Hash128& id, const vnx::Object& object);
 	
 	void insert_one(table_t& table, const vnx::Hash128& id, const vnx::Object& object);
 	
-	void update_one(const Hash128& key, const Object& object);
+	void update_one(const Hash128& id, const Object& object);
 	
 	void update_one(table_t& table, const Hash128& id, const Object& object);
 	
+	void delete_one(const Hash128& id);
+	
 	void delete_one(table_t& table, const Hash128& id);
 	
-	void read_block(block_t& block);
-	
-	void read_table(table_t& table);
-	
-	void read_object(vnx::File& file, int64_t offset, Object& object) const;
-	
-	bool read_object(const Hash128& key, Object& object) const;
-	
-	bool get_object(const Hash128& key, Object& object) const;
+	const Object* get_object(const Hash128& key) const;
 	
 	void commit();
 	
@@ -97,10 +86,10 @@ private:
 
 private:
 	vnx::File stage_file;
-	std::vector<block_t> block_table;
-	std::unordered_map<Hash128, std::pair<size_t, size_t>> index;
-	std::unordered_map<Hash128, Object> stage;
+	std::shared_ptr<Root> root;
 	std::map<std::string, table_t> table_map;
+	std::unordered_map<Hash128, Object> index;
+	std::unordered_map<Hash128, Object> stage;
 	
 };
 	

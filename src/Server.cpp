@@ -1,5 +1,8 @@
 
 #include <vnx/database/Server.h>
+#include <vnx/database/Root.hxx>
+#include <vnx/database/Table.hxx>
+
 #include <vnx/Request.hxx>
 #include <vnx/Generic.hxx>
 
@@ -18,34 +21,64 @@ void Server::init() {
 
 void Server::main()
 {
-	if(auto value = vnx::read_from_file<vnx::Generic>(location + "index.dat")) {
-		const auto list = value->data.to<std::vector<std::string>>();
-		if(!list.empty()) {
-			for(const auto& file_name : list) {
-				block_t block;
-				block.index = block_table.size();
-				block.file = std::make_shared<vnx::File>(file_name);
-				read_block(block);
-				block_table.push_back(block);
+	root = vnx::read_from_file<Root>(location + "/index.dat");
+	if(root) {
+		for(const auto& file_name : root->blocks) {
+			try {
+				vnx::File file(file_name);
+				file.open("rb");
+				while(auto value = vnx::read(file.in)) {
+					if(auto object = std::dynamic_pointer_cast<Object>(value)) {
+						const auto id = (*object)["id"].to<Hash128>();
+						if((*object)["__delete"]) {
+							index.erase(id);
+						} else {
+							index[id] = *object;
+						}
+					} else {
+						log(WARN) << "Not an Object: " << value->get_type_name();
+					}
+				}
+			} catch(const std::underflow_error& ex) {
+				// nothing
+			} catch(const std::exception& ex) {
+				log(ERROR) << "Failed to read block '" << file_name << "': " << ex.what();
+				if(!ignore_errors) {
+					throw;
+				}
 			}
-			log(INFO) << "Loaded " << block_table.size() << " blocks, " << index.size() << " objects total.";
-		} else {
-			throw std::runtime_error("Invalid index file!");
 		}
-	}
-	if(auto value = vnx::read_from_file<vnx::Generic>(location + "table.dat")) {
-		const auto list = value->data.to<std::vector<std::string>>();
-		if(!list.empty()) {
-			for(const auto& table_name : list) {
-				table_t& table = get_table(table_name);
-				table.hash = Hash128(table_name);
-				table.file = std::make_shared<vnx::File>(location + "table_" + table_name + ".dat");
-				read_table(table);
-				log(INFO) << "Loaded table '" << table_name << "' with " << table.rows.size() << " objects total.";
+		log(INFO) << "Loaded " << root->blocks.size() << " blocks, " << index.size() << " objects total.";
+		
+		for(const auto& table_name : root->tables)
+		{
+			table_t& table = get_table(table_name);
+			table.hash = Hash128(table_name);
+			table.file = std::make_shared<vnx::File>(location + "/table_" + table_name + ".dat");
+			try {
+				table.file->open("rb");
+				if(auto value = vnx::read(table.file->in)) {
+					if(auto tmp = std::dynamic_pointer_cast<Table>(value)) {
+						if(tmp->name == table_name) {
+							table.rows.insert(tmp->keys.begin(), tmp->keys.end());
+						} else {
+							throw std::logic_error("invalid table name: " + tmp->name);
+						}
+					} else {
+						throw std::logic_error("!Table");
+					}
+				}
+			} catch(const std::exception& ex) {
+				log(ERROR) << "Failed to read table '" << table_name << "': " << ex.what();
+				if(!ignore_errors) {
+					throw;
+				}
 			}
-		} else {
-			throw std::runtime_error("Invalid table file!");
+			table.file->close();
+			log(INFO) << "Loaded table '" << table_name << "' with " << table.rows.size() << " objects total.";
 		}
+	} else {
+		root = Root::create();
 	}
 	
 	stage_file.open(location + "stage.dat", "ab+");
@@ -90,7 +123,7 @@ std::shared_ptr<const vnx::Return> Server::handle(std::shared_ptr<const vnx::Req
 	return Super::handle(request);
 }
 
-static Object aggregate(const query::Select& query, const std::vector<Object>& result) {
+Object aggregate(const query::Select& query, const std::vector<Object>& result) {
 	std::map<std::string, std::shared_ptr<query::Aggregate>> funcs;
 	for(const auto& entry : query.aggregates) {
 		funcs[entry.first] = vnx::clone(entry.second);
@@ -231,12 +264,10 @@ void Server::delete_from(const query::Delete& query) {
 
 Object Server::select_one(const std::string& table_name, const Hash128& id) const {
 	const table_t& table = find_table(table_name);
-	const Hash128 key = flip_hash(table, id);
-	Object object;
-	if(get_object(key, object)) {
-		object["id"] = id;
+	if(const auto* object = get_object(id)) {
+		return *object;
 	}
-	return object;
+	return Object();
 }
 
 std::vector<Object> Server::select_many(const std::string& table_name, const std::vector<Hash128>& ids) const {
@@ -247,10 +278,15 @@ std::vector<Object> Server::select_many(const std::string& table_name, const std
 	return result;
 }
 
+void Server::insert_one(const vnx::Hash128& id, const vnx::Object& object) {
+	auto& staged = stage[id];
+	staged = object;
+	staged["id"] = id;
+}
+
 void Server::insert_one(table_t& table, const vnx::Hash128& id, const vnx::Object& object) {
-	const Hash128 key = flip_hash(table, id);
-	insert_key(table, key);
-	stage[key] = object;
+	insert_row(table, id);
+	insert_one(id, object);
 }
 
 void Server::insert_one(const std::string& table_name, const Hash128& id, const Object& object) {
@@ -267,28 +303,23 @@ void Server::insert_many(const std::string& table_name, const std::map<Hash128, 
 	commit();
 }
 
-void Server::update_one(const Hash128& key, const Object& object) {
-	Object *p_object;
-	auto iter = stage.find(key);
-	if(iter != stage.end()) {
-		p_object = &iter->second;
-	} else {
-		p_object = &stage[key];
-		if(!read_object(key, *p_object)) {
-			throw std::logic_error("update_one(): no such object");
+void Server::update_one(const Hash128& id, const Object& object) {
+	if(const auto* obj = get_object(id)) {
+		Object tmp = *obj;
+		for(const auto& field : object.field) {
+			if(field.first != "id") {
+				tmp[field.first] = field.second;
+			}
 		}
-	}
-	for(const auto& field : object.field) {
-		(*p_object)[field.first] = field.second;
+		stage[id] = tmp;
 	}
 }
 
 void Server::update_one(table_t& table, const Hash128& id, const Object& object) {
-	const Hash128 key = flip_hash(table, id);
-	if(insert_key(table, key)) {
-		stage[key] = object;
+	if(insert_row(table, id)) {
+		insert_one(id, object);
 	} else {
-		update_one(key, object);
+		update_one(id, object);
 	}
 }
 
@@ -306,11 +337,18 @@ void Server::update_many(const std::string& table_name, const std::map<Hash128, 
 	commit();
 }
 
+void Server::delete_one(const Hash128& id) {
+	auto& object = stage[id];
+	object.clear();
+	object["id"] = id;
+	object["__delete"] = true;
+}
+
 void Server::delete_one(table_t& table, const Hash128& id) {
-	const Hash128 key = flip_hash(table, id);
-	if(table.rows.count(key)) {
-		table.rows.erase(key);
-		stage[key].clear();
+	auto iter = table.rows.find(id);
+	if(iter != table.rows.end()) {
+		table.rows.erase(iter);
+		delete_one(id);
 	}
 }
 
@@ -330,20 +368,20 @@ void Server::delete_many(const std::string& table_name, const std::vector<Hash12
 
 void Server::truncate(const std::string& table_name) {
 	table_t& table = get_table(table_name);
-	for(const auto& key : table.rows) {
-		stage[key].clear();
+	for(const auto& id : table.rows) {
+		delete_one(id);
 	}
 	table.rows.clear();
 	commit();
 }
 
-std::map<std::string, Object> Server::get_table_info() const {
-	std::map<std::string, Object> result;
+std::vector<table_info_t> Server::get_table_info() const {
+	std::vector<table_info_t> result;
 	for(const auto& entry : table_map) {
-		Object row;
-		row["name"] = entry.first;
-		row["num_rows"] = entry.second.rows.size();
-		result[entry.first] = row;
+		table_info_t info;
+		info.name = entry.first;
+		info.num_rows = entry.second.rows.size();
+		result.emplace_back(info);
 	}
 	return result;
 }
@@ -365,76 +403,22 @@ const Server::table_t& Server::find_table(const std::string& name) const {
 	return iter->second;
 }
 
-Hash128 Server::flip_hash(const table_t& table, const Hash128& hash) const {
-	return Hash128(Hash64(hash.A() xor table.hash.A()), Hash64(hash.B() xor table.hash.B()));
-}
-
-bool Server::insert_key(table_t& table, const Hash128& key) {
+bool Server::insert_row(table_t& table, const Hash128& key) {
 	return table.rows.insert(key).second;
 }
 
-void Server::read_block(block_t& block) {
-	vnx::File& file = *block.file;
-	file.open("rb");
-	if(file.read_header() != CODE_DYNAMIC) {
-		throw std::runtime_error("read_block(): invalid code");
-	}
-	std::map<Hash128, int64_t> list;
-	vnx::read_dynamic(file.in, list);
-	for(const auto& entry : list) {
-		if(entry.second >= 0) {
-			index[entry.first] = std::make_pair(block.index, size_t(entry.second));
-		} else {
-			index.erase(entry.first);
+const Object* Server::get_object(const Hash128& key) const {
+	{
+		auto iter = stage.find(key);
+		if(iter != stage.end()) {
+			return &iter->second;
 		}
 	}
-}
-
-void Server::read_table(table_t& table) {
-	vnx::File& file = *table.file;
-	file.open("rb");
-	if(file.read_header() != CODE_DYNAMIC) {
-		throw std::runtime_error("read_table(): invalid code");
-	}
-	std::vector<Hash128> list;
-	vnx::read_dynamic(file.in, list);
-	for(const auto& key : list) {
-		table.rows.insert(key);
-	}
-	file.close();
-}
-
-void Server::read_object(vnx::File& file, int64_t offset, Object& object) const {
-	file.seek_to(offset);
-	file.in.fetch(1024);
-	uint16_t code;
-	vnx::read(file.in, code);
-	if(code == CODE_OBJECT || code == CODE_ALT_OBJECT) {
-		object.read(file.in, 0, &code);
-	} else {
-		throw std::runtime_error("read_object(): invalid code");
-	}
-}
-
-bool Server::read_object(const Hash128& key, Object& object) const {
 	auto iter = index.find(key);
 	if(iter != index.end()) {
-		const block_t& block = block_table[iter->second.first];
-		if(block.file) {
-			read_object(*block.file, iter->second.second, object);
-			return true;
-		}
+		return &iter->second;
 	}
-	return false;
-}
-
-bool Server::get_object(const Hash128& key, Object& object) const {
-	auto iter = stage.find(key);
-	if(iter != stage.end()) {
-		object = iter->second;
-		return true;
-	}
-	return read_object(key, object);
+	return nullptr;
 }
 
 void Server::commit() {
@@ -457,8 +441,8 @@ void Server::write_new_block()
 	block_t block;
 	block.index = block_table.size();
 	block.file = std::make_shared<vnx::File>();
-	vnx::File& file = *block.file;
-	file.open(location + "block_" + std::to_string(block.index) + ".dat", "wb");
+	vnx::File file(location + "block_" + std::to_string(block.index) + ".dat");
+	file.open(, "wb");
 	file.write_header();
 	
 	std::map<Hash128, int64_t> header;

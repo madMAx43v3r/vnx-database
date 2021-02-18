@@ -1,0 +1,9 @@
+package vnx.database;
+
+struct table_info_t {
+	
+	string name;
+	
+	ulong num_rows;
+	
+}

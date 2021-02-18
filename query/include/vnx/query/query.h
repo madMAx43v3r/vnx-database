@@ -70,8 +70,8 @@ std::shared_ptr<Update> update(	const std::string& table,
 								const Object& set = Object(),
 								std::shared_ptr<const Expression> where = nullptr);
 
-std::shared_ptr<Delete> delete_(const std::string& from,
-								std::shared_ptr<const Expression> where = nullptr);
+std::shared_ptr<Delete> delete_from(const std::string& from,
+									std::shared_ptr<const Expression> where = nullptr);
 
 
 } // query

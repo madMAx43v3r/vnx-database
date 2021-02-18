@@ -1,0 +1,11 @@
+package vnx.database;
+
+import vnx.Hash128;
+
+class Table {
+	
+	string name;
+	
+	vector<Hash128> keys;
+	
+}
