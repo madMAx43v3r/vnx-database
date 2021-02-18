@@ -1,0 +1,11 @@
+package vnx.query;
+
+class Delete extends Query {
+	
+	string from;						// table name
+	
+	Expression* where;					// empty expression means all rows
+	
+	string as_string() const;
+	
+}

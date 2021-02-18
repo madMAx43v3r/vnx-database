@@ -1,0 +1,12 @@
+package vnx.query;
+
+import vnx.Variant;
+import vnx.Object;
+
+class Expression {
+	
+	Variant execute(Object object) const;
+	
+	string as_string() const;
+	
+}

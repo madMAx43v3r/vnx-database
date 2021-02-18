@@ -1,0 +1,11 @@
+package vnx.query;
+
+class Limit {
+	
+	long num_rows = -1;			// -1 means unlimited
+	
+	long offset = 0;
+	
+	string as_string() const;
+	
+}

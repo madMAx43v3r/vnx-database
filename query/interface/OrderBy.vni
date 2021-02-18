@@ -1,0 +1,14 @@
+package vnx.query;
+
+class OrderBy {
+	
+	string field;
+	
+	int mode = 1;
+	
+	static const int ASC = 1;
+	static const int DESC = -1;
+	
+	string as_string() const;
+	
+}

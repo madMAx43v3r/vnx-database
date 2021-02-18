@@ -1,0 +1,46 @@
+package vnx.database;
+
+import vnx.Object;
+import vnx.Hash128;
+
+module Server {
+	
+	string location = "data/";
+	
+	long block_size = 67108864;
+	
+	
+	vector<Object> select(vnx.query.Select query) const;
+	
+	void update(vnx.query.Update query);
+	
+	void delete_from(vnx.query.Delete query);
+	
+	
+	Object select_one(string table, Hash128 id) const;
+	
+	vector<Object> select_many(string table, vector<Hash128> ids) const;
+	
+	
+	void insert_one(string table, Hash128 id, Object object);
+	
+	void insert_many(string table, map<Hash128, Object> objects);
+	
+	
+	void update_one(string table, Hash128 id, Object object);
+	
+	void update_many(string table, map<Hash128, Object> objects);
+	
+	
+	void delete_one(string table, Hash128 id);
+	
+	void delete_many(string table, vector<Hash128> ids);
+	
+	void truncate(string table);
+	
+	
+	map<string, Object> get_table_info() const;
+	
+	void write_new_block();
+	
+}

@@ -1,0 +1,7 @@
+package vnx.query;
+
+class Query {
+	
+	string as_string() const;
+	
+}

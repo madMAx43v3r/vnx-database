@@ -1,0 +1,23 @@
+package vnx.query;
+
+class Select extends Query {
+	
+	map<string, Expression*> fields;		// empty vector means all fields
+	
+	map<string, Aggregate*> aggregates;		// empty vectors means normal query
+	
+	string from;						// table name
+	
+	Expression* where;					// empty expression means all rows
+	
+	GroupBy* group_by;
+	
+	Expression* having;
+	
+	OrderBy* order_by;
+	
+	Limit* limit;
+	
+	string as_string() const;
+	
+}

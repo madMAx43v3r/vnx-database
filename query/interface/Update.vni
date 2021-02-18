@@ -1,0 +1,15 @@
+package vnx.query;
+
+import vnx.Object;
+
+class Update extends Query {
+	
+	string table;						// table name
+	
+	Object set;
+	
+	Expression* where;					// empty expression means all rows
+	
+	string as_string() const;
+	
+}

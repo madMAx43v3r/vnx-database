@@ -1,0 +1,14 @@
+package vnx.query;
+
+import vnx.Variant;
+import vnx.Object;
+
+class Not extends Expression {
+	
+	Expression* A;
+	
+	Variant execute(Object object) const;
+	
+	string as_string() const;
+	
+}

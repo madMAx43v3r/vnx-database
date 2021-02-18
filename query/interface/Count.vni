@@ -1,0 +1,16 @@
+package vnx.query;
+
+import vnx.Variant;
+import vnx.Object;
+
+class Count extends Aggregate {
+	
+	ulong result = 0;
+	
+	void update(Object object);
+	
+	Variant get_result() const;
+	
+	string as_string() const;
+	
+}
