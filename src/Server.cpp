@@ -108,7 +108,12 @@ void Server::main()
 	log(INFO) << "Loaded " << stage.size() << " objects from stage file.";
 	
 	stage_file.open("rb+");
-	stage_file.seek_to(last_pos);
+	if(last_pos > 0) {
+		stage_file.seek_to(last_pos);
+	} else {
+		stage_file.write_header();
+		stage_file.flush();
+	}
 	
 	set_timer_millis(1000, std::bind(&Server::maintain, this));
 	
