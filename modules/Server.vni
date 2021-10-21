@@ -7,7 +7,9 @@ module Server {
 	
 	string location = "data/";
 	
-	long block_size = 67108864;
+	string id_name = "id";
+	
+	long max_block_size = 67108864;		// [bytes]
 	
 	bool ignore_errors = false;			// if to ignore data corruption on load
 	

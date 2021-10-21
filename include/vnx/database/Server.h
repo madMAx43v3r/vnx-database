@@ -55,9 +55,8 @@ protected:
 
 private:
 	struct table_t {
-		Hash128 hash;
 		std::shared_ptr<vnx::File> file;
-		std::unordered_set<Hash128> rows;
+		std::unordered_set<Hash128> keys;
 	};
 	
 	table_t& get_table(const std::string& name);
