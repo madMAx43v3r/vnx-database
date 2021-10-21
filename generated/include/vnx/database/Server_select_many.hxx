@@ -25,6 +25,8 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0xe1346a3b8326c22full;
 	
+	Server_select_many() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;

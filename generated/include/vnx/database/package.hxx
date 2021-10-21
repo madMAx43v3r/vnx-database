@@ -13,6 +13,7 @@ namespace vnx {
 namespace database {
 
 
+class Root;
 class ServerBase;
 class Server_delete_from;
 class Server_delete_from_return;
@@ -42,7 +43,10 @@ class Server_update_one;
 class Server_update_one_return;
 class Server_write_new_block;
 class Server_write_new_block_return;
+class Table;
+struct table_info_t;
 
+extern const vnx::TypeCode* const vnx_native_type_code_Root; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_ServerBase; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_delete_from; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_delete_from_return; ///< \private
@@ -72,6 +76,8 @@ extern const vnx::TypeCode* const vnx_native_type_code_Server_update_one; ///< \
 extern const vnx::TypeCode* const vnx_native_type_code_Server_update_one_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_write_new_block; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_write_new_block_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Table; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_table_info_t; ///< \private
 
 } // namespace vnx
 } // namespace database
@@ -79,6 +85,7 @@ extern const vnx::TypeCode* const vnx_native_type_code_Server_write_new_block_re
 
 namespace vnx {
 
+void read(TypeInput& in, ::vnx::database::Root& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::ServerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_delete_from& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_delete_from_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -108,7 +115,10 @@ void read(TypeInput& in, ::vnx::database::Server_update_one& value, const TypeCo
 void read(TypeInput& in, ::vnx::database::Server_update_one_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_write_new_block& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_write_new_block_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::database::Table& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::database::table_info_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 
+void write(TypeOutput& out, const ::vnx::database::Root& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::ServerBase& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_delete_from& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_delete_from_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -138,7 +148,10 @@ void write(TypeOutput& out, const ::vnx::database::Server_update_one& value, con
 void write(TypeOutput& out, const ::vnx::database::Server_update_one_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_write_new_block& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_write_new_block_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::database::Table& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::database::table_info_t& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 
+void read(std::istream& in, ::vnx::database::Root& value); ///< \private
 void read(std::istream& in, ::vnx::database::ServerBase& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_delete_from& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_delete_from_return& value); ///< \private
@@ -168,7 +181,10 @@ void read(std::istream& in, ::vnx::database::Server_update_one& value); ///< \pr
 void read(std::istream& in, ::vnx::database::Server_update_one_return& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_write_new_block& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_write_new_block_return& value); ///< \private
+void read(std::istream& in, ::vnx::database::Table& value); ///< \private
+void read(std::istream& in, ::vnx::database::table_info_t& value); ///< \private
 
+void write(std::ostream& out, const ::vnx::database::Root& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::ServerBase& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_delete_from& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_delete_from_return& value); ///< \private
@@ -198,7 +214,10 @@ void write(std::ostream& out, const ::vnx::database::Server_update_one& value); 
 void write(std::ostream& out, const ::vnx::database::Server_update_one_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_write_new_block& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_write_new_block_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::database::Table& value); ///< \private
+void write(std::ostream& out, const ::vnx::database::table_info_t& value); ///< \private
 
+void accept(Visitor& visitor, const ::vnx::database::Root& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::ServerBase& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_delete_from& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_delete_from_return& value); ///< \private
@@ -228,6 +247,30 @@ void accept(Visitor& visitor, const ::vnx::database::Server_update_one& value); 
 void accept(Visitor& visitor, const ::vnx::database::Server_update_one_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_write_new_block& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_write_new_block_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::database::Table& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::database::table_info_t& value); ///< \private
+
+/// \private
+template<>
+struct type<::vnx::database::Root> {
+	void read(TypeInput& in, ::vnx::database::Root& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::database::Root& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::database::Root& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::database::Root& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::database::Root& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Root& value, bool special = false);
+};
 
 /// \private
 template<>
@@ -268,9 +311,7 @@ struct type<::vnx::database::Server_delete_from> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_from& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_from& value, bool special = false);
 };
 
 /// \private
@@ -292,9 +333,7 @@ struct type<::vnx::database::Server_delete_from_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_from_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_from_return& value, bool special = false);
 };
 
 /// \private
@@ -316,9 +355,7 @@ struct type<::vnx::database::Server_delete_many> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_many& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_many& value, bool special = false);
 };
 
 /// \private
@@ -340,9 +377,7 @@ struct type<::vnx::database::Server_delete_many_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_many_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_many_return& value, bool special = false);
 };
 
 /// \private
@@ -364,9 +399,7 @@ struct type<::vnx::database::Server_delete_one> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_one& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_one& value, bool special = false);
 };
 
 /// \private
@@ -388,9 +421,7 @@ struct type<::vnx::database::Server_delete_one_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_one_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_delete_one_return& value, bool special = false);
 };
 
 /// \private
@@ -412,9 +443,7 @@ struct type<::vnx::database::Server_get_table_info> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_get_table_info& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_get_table_info& value, bool special = false);
 };
 
 /// \private
@@ -436,9 +465,7 @@ struct type<::vnx::database::Server_get_table_info_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_get_table_info_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_get_table_info_return& value, bool special = false);
 };
 
 /// \private
@@ -460,9 +487,7 @@ struct type<::vnx::database::Server_insert_many> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_insert_many& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_insert_many& value, bool special = false);
 };
 
 /// \private
@@ -484,9 +509,7 @@ struct type<::vnx::database::Server_insert_many_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_insert_many_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_insert_many_return& value, bool special = false);
 };
 
 /// \private
@@ -508,9 +531,7 @@ struct type<::vnx::database::Server_insert_one> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_insert_one& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_insert_one& value, bool special = false);
 };
 
 /// \private
@@ -532,9 +553,7 @@ struct type<::vnx::database::Server_insert_one_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_insert_one_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_insert_one_return& value, bool special = false);
 };
 
 /// \private
@@ -556,9 +575,7 @@ struct type<::vnx::database::Server_select> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select& value, bool special = false);
 };
 
 /// \private
@@ -580,9 +597,7 @@ struct type<::vnx::database::Server_select_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_return& value, bool special = false);
 };
 
 /// \private
@@ -604,9 +619,7 @@ struct type<::vnx::database::Server_select_many> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_many& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_many& value, bool special = false);
 };
 
 /// \private
@@ -628,9 +641,7 @@ struct type<::vnx::database::Server_select_many_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_many_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_many_return& value, bool special = false);
 };
 
 /// \private
@@ -652,9 +663,7 @@ struct type<::vnx::database::Server_select_one> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_one& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_one& value, bool special = false);
 };
 
 /// \private
@@ -676,9 +685,7 @@ struct type<::vnx::database::Server_select_one_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_one_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_one_return& value, bool special = false);
 };
 
 /// \private
@@ -700,9 +707,7 @@ struct type<::vnx::database::Server_truncate> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_truncate& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_truncate& value, bool special = false);
 };
 
 /// \private
@@ -724,9 +729,7 @@ struct type<::vnx::database::Server_truncate_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_truncate_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_truncate_return& value, bool special = false);
 };
 
 /// \private
@@ -748,9 +751,7 @@ struct type<::vnx::database::Server_update> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update& value, bool special = false);
 };
 
 /// \private
@@ -772,9 +773,7 @@ struct type<::vnx::database::Server_update_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_return& value, bool special = false);
 };
 
 /// \private
@@ -796,9 +795,7 @@ struct type<::vnx::database::Server_update_many> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_many& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_many& value, bool special = false);
 };
 
 /// \private
@@ -820,9 +817,7 @@ struct type<::vnx::database::Server_update_many_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_many_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_many_return& value, bool special = false);
 };
 
 /// \private
@@ -844,9 +839,7 @@ struct type<::vnx::database::Server_update_one> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_one& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_one& value, bool special = false);
 };
 
 /// \private
@@ -868,9 +861,7 @@ struct type<::vnx::database::Server_update_one_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_one_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_update_one_return& value, bool special = false);
 };
 
 /// \private
@@ -892,9 +883,7 @@ struct type<::vnx::database::Server_write_new_block> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_write_new_block& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_write_new_block& value, bool special = false);
 };
 
 /// \private
@@ -916,9 +905,51 @@ struct type<::vnx::database::Server_write_new_block_return> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_write_new_block_return& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_write_new_block_return& value, bool special = false);
+};
+
+/// \private
+template<>
+struct type<::vnx::database::Table> {
+	void read(TypeInput& in, ::vnx::database::Table& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
 	}
+	void write(TypeOutput& out, const ::vnx::database::Table& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::database::Table& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::database::Table& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::database::Table& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Table& value, bool special = false);
+};
+
+/// \private
+template<>
+struct type<::vnx::database::table_info_t> {
+	void read(TypeInput& in, ::vnx::database::table_info_t& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::database::table_info_t& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::database::table_info_t& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::database::table_info_t& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::database::table_info_t& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::table_info_t& value, bool special = false);
 };
 
 

@@ -8,6 +8,7 @@
 #include <vnx/Hash128.hpp>
 #include <vnx/Module.h>
 #include <vnx/Object.hpp>
+#include <vnx/database/table_info_t.hxx>
 #include <vnx/query/Delete.hxx>
 #include <vnx/query/Select.hxx>
 #include <vnx/query/Update.hxx>
@@ -26,15 +27,15 @@ public:
 			const std::function<void(const ::vnx::Object&)>& _callback = std::function<void(const ::vnx::Object&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_get_config(const std::string& name, 
+	uint64_t vnx_get_config(const std::string& name = "", 
 			const std::function<void(const ::vnx::Variant&)>& _callback = std::function<void(const ::vnx::Variant&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_set_config_object(const ::vnx::Object& config, 
+	uint64_t vnx_set_config_object(const ::vnx::Object& config = ::vnx::Object(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t vnx_set_config(const std::string& name, const ::vnx::Variant& value, 
+	uint64_t vnx_set_config(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
@@ -58,56 +59,56 @@ public:
 			const std::function<void(const vnx::bool_t&)>& _callback = std::function<void(const vnx::bool_t&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t select(const ::vnx::query::Select& query, 
+	uint64_t select(const ::vnx::query::Select& query = ::vnx::query::Select(), 
 			const std::function<void(const std::vector<::vnx::Object>&)>& _callback = std::function<void(const std::vector<::vnx::Object>&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t update(const ::vnx::query::Update& query, 
+	uint64_t update(const ::vnx::query::Update& query = ::vnx::query::Update(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t delete_from(const ::vnx::query::Delete& query, 
+	uint64_t delete_from(const ::vnx::query::Delete& query = ::vnx::query::Delete(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t select_one(const std::string& table, const ::vnx::Hash128& id, 
+	uint64_t select_one(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128(), 
 			const std::function<void(const ::vnx::Object&)>& _callback = std::function<void(const ::vnx::Object&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t select_many(const std::string& table, const std::vector<::vnx::Hash128>& ids, 
+	uint64_t select_many(const std::string& table = "", const std::vector<::vnx::Hash128>& ids = {}, 
 			const std::function<void(const std::vector<::vnx::Object>&)>& _callback = std::function<void(const std::vector<::vnx::Object>&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t insert_one(const std::string& table, const ::vnx::Hash128& id, const ::vnx::Object& object, 
+	uint64_t insert_one(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128(), const ::vnx::Object& object = ::vnx::Object(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t insert_many(const std::string& table, const std::map<::vnx::Hash128, ::vnx::Object>& objects, 
+	uint64_t insert_many(const std::string& table = "", const std::map<::vnx::Hash128, ::vnx::Object>& objects = {}, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t update_one(const std::string& table, const ::vnx::Hash128& id, const ::vnx::Object& object, 
+	uint64_t update_one(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128(), const ::vnx::Object& object = ::vnx::Object(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t update_many(const std::string& table, const std::map<::vnx::Hash128, ::vnx::Object>& objects, 
+	uint64_t update_many(const std::string& table = "", const std::map<::vnx::Hash128, ::vnx::Object>& objects = {}, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t delete_one(const std::string& table, const ::vnx::Hash128& id, 
+	uint64_t delete_one(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128(), 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t delete_many(const std::string& table, const std::vector<::vnx::Hash128>& ids, 
+	uint64_t delete_many(const std::string& table = "", const std::vector<::vnx::Hash128>& ids = {}, 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
-	uint64_t truncate(const std::string& table, 
+	uint64_t truncate(const std::string& table = "", 
 			const std::function<void()>& _callback = std::function<void()>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
 	uint64_t get_table_info(
-			const std::function<void(const std::map<std::string, ::vnx::Object>&)>& _callback = std::function<void(const std::map<std::string, ::vnx::Object>&)>(),
+			const std::function<void(const std::vector<::vnx::database::table_info_t>&)>& _callback = std::function<void(const std::vector<::vnx::database::table_info_t>&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
 	uint64_t write_new_block(
@@ -141,7 +142,7 @@ private:
 	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_delete_one;
 	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_delete_many;
 	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_truncate;
-	std::unordered_map<uint64_t, std::pair<std::function<void(const std::map<std::string, ::vnx::Object>&)>, std::function<void(const vnx::exception&)>>> vnx_queue_get_table_info;
+	std::unordered_map<uint64_t, std::pair<std::function<void(const std::vector<::vnx::database::table_info_t>&)>, std::function<void(const vnx::exception&)>>> vnx_queue_get_table_info;
 	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_write_new_block;
 	
 };

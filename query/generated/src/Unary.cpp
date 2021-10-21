@@ -16,7 +16,7 @@ namespace query {
 
 
 const vnx::Hash64 Unary::VNX_TYPE_HASH(0xc3bf356643366557ull);
-const vnx::Hash64 Unary::VNX_CODE_HASH(0xa2d0df231413bea9ull);
+const vnx::Hash64 Unary::VNX_CODE_HASH(0xcdc2578bd253f159ull);
 
 vnx::Hash64 Unary::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -57,7 +57,7 @@ void Unary::accept(vnx::Visitor& _visitor) const {
 void Unary::write(std::ostream& _out) const {
 	_out << "{\"__type\": \"vnx.query.Unary\"";
 	_out << ", \"type\": "; vnx::write(_out, type);
-	_out << ", \"A\": "; vnx::write(_out, X);
+	_out << ", \"X\": "; vnx::write(_out, X);
 	_out << "}";
 }
 
@@ -71,13 +71,13 @@ vnx::Object Unary::to_object() const {
 	vnx::Object _object;
 	_object["__type"] = "vnx.query.Unary";
 	_object["type"] = type;
-	_object["A"] = X;
+	_object["X"] = X;
 	return _object;
 }
 
 void Unary::from_object(const vnx::Object& _object) {
 	for(const auto& _entry : _object.field) {
-		if(_entry.first == "A") {
+		if(_entry.first == "X") {
 			_entry.second.to(X);
 		} else if(_entry.first == "type") {
 			_entry.second.to(type);
@@ -89,7 +89,7 @@ vnx::Variant Unary::get_field(const std::string& _name) const {
 	if(_name == "type") {
 		return vnx::Variant(type);
 	}
-	if(_name == "A") {
+	if(_name == "X") {
 		return vnx::Variant(X);
 	}
 	return vnx::Variant();
@@ -98,7 +98,7 @@ vnx::Variant Unary::get_field(const std::string& _name) const {
 void Unary::set_field(const std::string& _name, const vnx::Variant& _value) {
 	if(_name == "type") {
 		_value.to(type);
-	} else if(_name == "A") {
+	} else if(_name == "X") {
 		_value.to(X);
 	} else {
 		throw std::logic_error("no such field: '" + _name + "'");
@@ -129,7 +129,7 @@ std::shared_ptr<vnx::TypeCode> Unary::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.query.Unary";
 	type_code->type_hash = vnx::Hash64(0xc3bf356643366557ull);
-	type_code->code_hash = vnx::Hash64(0xa2d0df231413bea9ull);
+	type_code->code_hash = vnx::Hash64(0xcdc2578bd253f159ull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->native_size = sizeof(::vnx::query::Unary);
@@ -148,7 +148,7 @@ std::shared_ptr<vnx::TypeCode> Unary::static_create_type_code() {
 	{
 		auto& field = type_code->fields[1];
 		field.is_extended = true;
-		field.name = "A";
+		field.name = "X";
 		field.code = {16};
 	}
 	type_code->build();
@@ -192,6 +192,7 @@ void read(TypeInput& in, ::vnx::query::Unary& value, const TypeCode* type_code, 
 			}
 		}
 	}
+	in.read(type_code->total_field_size);
 	if(type_code->is_matched) {
 	}
 	for(const auto* _field : type_code->ext_fields) {

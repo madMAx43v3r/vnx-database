@@ -31,7 +31,7 @@ class Sum;
 class Unary;
 class Update;
 class Value;
-class op_type_e;
+struct op_type_e;
 
 extern const vnx::TypeCode* const vnx_native_type_code_Aggregate; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Average; ///< \private
@@ -178,9 +178,7 @@ struct type<::vnx::query::Aggregate> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Aggregate& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Aggregate& value, bool special = false);
 };
 
 /// \private
@@ -202,9 +200,7 @@ struct type<::vnx::query::Average> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Average& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Average& value, bool special = false);
 };
 
 /// \private
@@ -226,9 +222,7 @@ struct type<::vnx::query::Comparison> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Comparison& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Comparison& value, bool special = false);
 };
 
 /// \private
@@ -250,9 +244,7 @@ struct type<::vnx::query::Count> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Count& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Count& value, bool special = false);
 };
 
 /// \private
@@ -274,9 +266,7 @@ struct type<::vnx::query::Delete> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Delete& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Delete& value, bool special = false);
 };
 
 /// \private
@@ -298,9 +288,7 @@ struct type<::vnx::query::Expression> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Expression& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Expression& value, bool special = false);
 };
 
 /// \private
@@ -322,9 +310,7 @@ struct type<::vnx::query::Field> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Field& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Field& value, bool special = false);
 };
 
 /// \private
@@ -346,9 +332,7 @@ struct type<::vnx::query::GroupBy> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::GroupBy& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::GroupBy& value, bool special = false);
 };
 
 /// \private
@@ -370,9 +354,7 @@ struct type<::vnx::query::Limit> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Limit& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Limit& value, bool special = false);
 };
 
 /// \private
@@ -394,9 +376,7 @@ struct type<::vnx::query::Max> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Max& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Max& value, bool special = false);
 };
 
 /// \private
@@ -418,9 +398,7 @@ struct type<::vnx::query::Min> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Min& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Min& value, bool special = false);
 };
 
 /// \private
@@ -442,9 +420,7 @@ struct type<::vnx::query::OrderBy> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::OrderBy& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::OrderBy& value, bool special = false);
 };
 
 /// \private
@@ -466,9 +442,7 @@ struct type<::vnx::query::Query> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Query& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Query& value, bool special = false);
 };
 
 /// \private
@@ -490,9 +464,7 @@ struct type<::vnx::query::Select> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Select& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Select& value, bool special = false);
 };
 
 /// \private
@@ -514,9 +486,7 @@ struct type<::vnx::query::Sum> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Sum& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Sum& value, bool special = false);
 };
 
 /// \private
@@ -538,9 +508,7 @@ struct type<::vnx::query::Unary> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Unary& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Unary& value, bool special = false);
 };
 
 /// \private
@@ -562,9 +530,7 @@ struct type<::vnx::query::Update> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Update& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Update& value, bool special = false);
 };
 
 /// \private
@@ -586,9 +552,7 @@ struct type<::vnx::query::Value> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Value& value, bool special = false) {
-		code.push_back(CODE_OBJECT);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Value& value, bool special = false);
 };
 
 /// \private
@@ -610,9 +574,7 @@ struct type<::vnx::query::op_type_e> {
 		vnx::accept(visitor, value);
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
-	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::op_type_e& value, bool special = false) {
-		code.push_back(CODE_STRING);
-	}
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::op_type_e& value, bool special = false);
 };
 
 

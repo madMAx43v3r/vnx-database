@@ -8,6 +8,7 @@
 #include <vnx/Hash128.hpp>
 #include <vnx/Module.h>
 #include <vnx/Object.hpp>
+#include <vnx/database/table_info_t.hxx>
 #include <vnx/query/Delete.hxx>
 #include <vnx/query/Select.hxx>
 #include <vnx/query/Update.hxx>
@@ -24,15 +25,15 @@ public:
 	
 	::vnx::Object vnx_get_config_object();
 	
-	::vnx::Variant vnx_get_config(const std::string& name);
+	::vnx::Variant vnx_get_config(const std::string& name = "");
 	
-	void vnx_set_config_object(const ::vnx::Object& config);
+	void vnx_set_config_object(const ::vnx::Object& config = ::vnx::Object());
 	
-	void vnx_set_config_object_async(const ::vnx::Object& config);
+	void vnx_set_config_object_async(const ::vnx::Object& config = ::vnx::Object());
 	
-	void vnx_set_config(const std::string& name, const ::vnx::Variant& value);
+	void vnx_set_config(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant());
 	
-	void vnx_set_config_async(const std::string& name, const ::vnx::Variant& value);
+	void vnx_set_config_async(const std::string& name = "", const ::vnx::Variant& value = ::vnx::Variant());
 	
 	::vnx::TypeCode vnx_get_type_code();
 	
@@ -48,49 +49,49 @@ public:
 	
 	vnx::bool_t vnx_self_test();
 	
-	std::vector<::vnx::Object> select(const ::vnx::query::Select& query);
+	std::vector<::vnx::Object> select(const ::vnx::query::Select& query = ::vnx::query::Select());
 	
-	void update(const ::vnx::query::Update& query);
+	void update(const ::vnx::query::Update& query = ::vnx::query::Update());
 	
-	void update_async(const ::vnx::query::Update& query);
+	void update_async(const ::vnx::query::Update& query = ::vnx::query::Update());
 	
-	void delete_from(const ::vnx::query::Delete& query);
+	void delete_from(const ::vnx::query::Delete& query = ::vnx::query::Delete());
 	
-	void delete_from_async(const ::vnx::query::Delete& query);
+	void delete_from_async(const ::vnx::query::Delete& query = ::vnx::query::Delete());
 	
-	::vnx::Object select_one(const std::string& table, const ::vnx::Hash128& id);
+	::vnx::Object select_one(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128());
 	
-	std::vector<::vnx::Object> select_many(const std::string& table, const std::vector<::vnx::Hash128>& ids);
+	std::vector<::vnx::Object> select_many(const std::string& table = "", const std::vector<::vnx::Hash128>& ids = {});
 	
-	void insert_one(const std::string& table, const ::vnx::Hash128& id, const ::vnx::Object& object);
+	void insert_one(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128(), const ::vnx::Object& object = ::vnx::Object());
 	
-	void insert_one_async(const std::string& table, const ::vnx::Hash128& id, const ::vnx::Object& object);
+	void insert_one_async(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128(), const ::vnx::Object& object = ::vnx::Object());
 	
-	void insert_many(const std::string& table, const std::map<::vnx::Hash128, ::vnx::Object>& objects);
+	void insert_many(const std::string& table = "", const std::map<::vnx::Hash128, ::vnx::Object>& objects = {});
 	
-	void insert_many_async(const std::string& table, const std::map<::vnx::Hash128, ::vnx::Object>& objects);
+	void insert_many_async(const std::string& table = "", const std::map<::vnx::Hash128, ::vnx::Object>& objects = {});
 	
-	void update_one(const std::string& table, const ::vnx::Hash128& id, const ::vnx::Object& object);
+	void update_one(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128(), const ::vnx::Object& object = ::vnx::Object());
 	
-	void update_one_async(const std::string& table, const ::vnx::Hash128& id, const ::vnx::Object& object);
+	void update_one_async(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128(), const ::vnx::Object& object = ::vnx::Object());
 	
-	void update_many(const std::string& table, const std::map<::vnx::Hash128, ::vnx::Object>& objects);
+	void update_many(const std::string& table = "", const std::map<::vnx::Hash128, ::vnx::Object>& objects = {});
 	
-	void update_many_async(const std::string& table, const std::map<::vnx::Hash128, ::vnx::Object>& objects);
+	void update_many_async(const std::string& table = "", const std::map<::vnx::Hash128, ::vnx::Object>& objects = {});
 	
-	void delete_one(const std::string& table, const ::vnx::Hash128& id);
+	void delete_one(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128());
 	
-	void delete_one_async(const std::string& table, const ::vnx::Hash128& id);
+	void delete_one_async(const std::string& table = "", const ::vnx::Hash128& id = ::vnx::Hash128());
 	
-	void delete_many(const std::string& table, const std::vector<::vnx::Hash128>& ids);
+	void delete_many(const std::string& table = "", const std::vector<::vnx::Hash128>& ids = {});
 	
-	void delete_many_async(const std::string& table, const std::vector<::vnx::Hash128>& ids);
+	void delete_many_async(const std::string& table = "", const std::vector<::vnx::Hash128>& ids = {});
 	
-	void truncate(const std::string& table);
+	void truncate(const std::string& table = "");
 	
-	void truncate_async(const std::string& table);
+	void truncate_async(const std::string& table = "");
 	
-	std::map<std::string, ::vnx::Object> get_table_info();
+	std::vector<::vnx::database::table_info_t> get_table_info();
 	
 	void write_new_block();
 	

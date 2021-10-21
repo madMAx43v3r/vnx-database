@@ -24,11 +24,13 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x1c9aa33b915b86dfull;
 	
+	Aggregate() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	virtual void update(const ::vnx::Object& object);
+	virtual void update(const ::vnx::Object& object = ::vnx::Object());
 	virtual ::vnx::Variant get_result() const;
 	virtual std::string as_string() const;
 	

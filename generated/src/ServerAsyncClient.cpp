@@ -52,6 +52,7 @@
 #include <vnx/database/Server_update_one_return.hxx>
 #include <vnx/database/Server_write_new_block.hxx>
 #include <vnx/database/Server_write_new_block_return.hxx>
+#include <vnx/database/table_info_t.hxx>
 #include <vnx/query/Delete.hxx>
 #include <vnx/query/Select.hxx>
 #include <vnx/query/Update.hxx>
@@ -351,7 +352,7 @@ uint64_t ServerAsyncClient::truncate(const std::string& table, const std::functi
 	return _request_id;
 }
 
-uint64_t ServerAsyncClient::get_table_info(const std::function<void(const std::map<std::string, ::vnx::Object>&)>& _callback, const std::function<void(const vnx::exception&)>& _error_callback) {
+uint64_t ServerAsyncClient::get_table_info(const std::function<void(const std::vector<::vnx::database::table_info_t>&)>& _callback, const std::function<void(const vnx::exception&)>& _error_callback) {
 	auto _method = ::vnx::database::Server_get_table_info::create();
 	const auto _request_id = ++vnx_next_id;
 	{
@@ -1006,7 +1007,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 				if(auto _result = std::dynamic_pointer_cast<const ::vnx::database::Server_get_table_info_return>(_value)) {
 					_callback(_result->_ret_0);
 				} else if(_value && !_value->is_void()) {
-					_callback(_value->get_field_by_index(0).to<std::map<std::string, ::vnx::Object>>());
+					_callback(_value->get_field_by_index(0).to<std::vector<::vnx::database::table_info_t>>());
 				} else {
 					throw std::logic_error("ServerAsyncClient: invalid return value");
 				}

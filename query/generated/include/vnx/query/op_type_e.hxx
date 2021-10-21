@@ -35,6 +35,7 @@ struct op_type_e {
 	static constexpr uint64_t VNX_TYPE_ID = 0xe97243d6947b0e63ull;
 	
 	op_type_e() {}
+	
 	op_type_e(const enum_t& _value) { value = _value; }
 	op_type_e(const ::vnx::query::op_type_e& _other) { value = _other.value; }
 	
@@ -57,6 +58,7 @@ struct op_type_e {
 	
 	void accept(vnx::Visitor& _visitor) const;
 	
+	vnx::bool_t is_valid() const;
 	std::string to_string() const;
 	std::string to_string_value() const;
 	std::string to_string_value_full() const;

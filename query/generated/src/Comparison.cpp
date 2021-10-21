@@ -16,7 +16,7 @@ namespace query {
 
 
 const vnx::Hash64 Comparison::VNX_TYPE_HASH(0x5390eb111dfabfdaull);
-const vnx::Hash64 Comparison::VNX_CODE_HASH(0x86f4f698851f5adaull);
+const vnx::Hash64 Comparison::VNX_CODE_HASH(0xedc192964aab84f3ull);
 
 vnx::Hash64 Comparison::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -58,8 +58,8 @@ void Comparison::accept(vnx::Visitor& _visitor) const {
 void Comparison::write(std::ostream& _out) const {
 	_out << "{\"__type\": \"vnx.query.Comparison\"";
 	_out << ", \"type\": "; vnx::write(_out, type);
-	_out << ", \"A\": "; vnx::write(_out, L);
-	_out << ", \"B\": "; vnx::write(_out, R);
+	_out << ", \"L\": "; vnx::write(_out, L);
+	_out << ", \"R\": "; vnx::write(_out, R);
 	_out << "}";
 }
 
@@ -73,16 +73,16 @@ vnx::Object Comparison::to_object() const {
 	vnx::Object _object;
 	_object["__type"] = "vnx.query.Comparison";
 	_object["type"] = type;
-	_object["A"] = L;
-	_object["B"] = R;
+	_object["L"] = L;
+	_object["R"] = R;
 	return _object;
 }
 
 void Comparison::from_object(const vnx::Object& _object) {
 	for(const auto& _entry : _object.field) {
-		if(_entry.first == "A") {
+		if(_entry.first == "L") {
 			_entry.second.to(L);
-		} else if(_entry.first == "B") {
+		} else if(_entry.first == "R") {
 			_entry.second.to(R);
 		} else if(_entry.first == "type") {
 			_entry.second.to(type);
@@ -94,10 +94,10 @@ vnx::Variant Comparison::get_field(const std::string& _name) const {
 	if(_name == "type") {
 		return vnx::Variant(type);
 	}
-	if(_name == "A") {
+	if(_name == "L") {
 		return vnx::Variant(L);
 	}
-	if(_name == "B") {
+	if(_name == "R") {
 		return vnx::Variant(R);
 	}
 	return vnx::Variant();
@@ -106,9 +106,9 @@ vnx::Variant Comparison::get_field(const std::string& _name) const {
 void Comparison::set_field(const std::string& _name, const vnx::Variant& _value) {
 	if(_name == "type") {
 		_value.to(type);
-	} else if(_name == "A") {
+	} else if(_name == "L") {
 		_value.to(L);
-	} else if(_name == "B") {
+	} else if(_name == "R") {
 		_value.to(R);
 	} else {
 		throw std::logic_error("no such field: '" + _name + "'");
@@ -139,7 +139,7 @@ std::shared_ptr<vnx::TypeCode> Comparison::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.query.Comparison";
 	type_code->type_hash = vnx::Hash64(0x5390eb111dfabfdaull);
-	type_code->code_hash = vnx::Hash64(0x86f4f698851f5adaull);
+	type_code->code_hash = vnx::Hash64(0xedc192964aab84f3ull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->native_size = sizeof(::vnx::query::Comparison);
@@ -158,13 +158,13 @@ std::shared_ptr<vnx::TypeCode> Comparison::static_create_type_code() {
 	{
 		auto& field = type_code->fields[1];
 		field.is_extended = true;
-		field.name = "A";
+		field.name = "L";
 		field.code = {16};
 	}
 	{
 		auto& field = type_code->fields[2];
 		field.is_extended = true;
-		field.name = "B";
+		field.name = "R";
 		field.code = {16};
 	}
 	type_code->build();
@@ -208,6 +208,7 @@ void read(TypeInput& in, ::vnx::query::Comparison& value, const TypeCode* type_c
 			}
 		}
 	}
+	in.read(type_code->total_field_size);
 	if(type_code->is_matched) {
 	}
 	for(const auto* _field : type_code->ext_fields) {

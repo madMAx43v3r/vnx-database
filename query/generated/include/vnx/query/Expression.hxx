@@ -24,11 +24,13 @@ public:
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x7bc4190eadb27d64ull;
 	
+	Expression() {}
+	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;
 	const vnx::TypeCode* get_type_code() const override;
 	
-	virtual ::vnx::Variant execute(const ::vnx::Object& object) const;
+	virtual ::vnx::Variant execute(const ::vnx::Object& object = ::vnx::Object()) const;
 	virtual std::string as_string() const;
 	
 	static std::shared_ptr<Expression> create();

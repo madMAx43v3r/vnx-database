@@ -52,6 +52,7 @@
 #include <vnx/database/Server_update_one_return.hxx>
 #include <vnx/database/Server_write_new_block.hxx>
 #include <vnx/database/Server_write_new_block_return.hxx>
+#include <vnx/database/table_info_t.hxx>
 #include <vnx/query/Delete.hxx>
 #include <vnx/query/Select.hxx>
 #include <vnx/query/Update.hxx>
@@ -345,13 +346,13 @@ void ServerClient::truncate_async(const std::string& table) {
 	vnx_request(_method, true);
 }
 
-std::map<std::string, ::vnx::Object> ServerClient::get_table_info() {
+std::vector<::vnx::database::table_info_t> ServerClient::get_table_info() {
 	auto _method = ::vnx::database::Server_get_table_info::create();
 	auto _return_value = vnx_request(_method, false);
 	if(auto _result = std::dynamic_pointer_cast<const ::vnx::database::Server_get_table_info_return>(_return_value)) {
 		return _result->_ret_0;
 	} else if(_return_value && !_return_value->is_void()) {
-		return _return_value->get_field_by_index(0).to<std::map<std::string, ::vnx::Object>>();
+		return _return_value->get_field_by_index(0).to<std::vector<::vnx::database::table_info_t>>();
 	} else {
 		throw std::logic_error("ServerClient: invalid return value");
 	}

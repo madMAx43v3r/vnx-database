@@ -32,76 +32,156 @@ void type<::vnx::query::Aggregate>::create_dynamic_code(std::vector<uint16_t>& c
 	create_dynamic_code(code, ::vnx::query::Aggregate());
 }
 
+void type<::vnx::query::Aggregate>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Aggregate& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::Average>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Average());
+}
+
+void type<::vnx::query::Average>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Average& value, bool special) {
+	code.push_back(CODE_OBJECT);
 }
 
 void type<::vnx::query::Comparison>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Comparison());
 }
 
+void type<::vnx::query::Comparison>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Comparison& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::Count>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Count());
+}
+
+void type<::vnx::query::Count>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Count& value, bool special) {
+	code.push_back(CODE_OBJECT);
 }
 
 void type<::vnx::query::Delete>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Delete());
 }
 
+void type<::vnx::query::Delete>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Delete& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::Expression>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Expression());
+}
+
+void type<::vnx::query::Expression>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Expression& value, bool special) {
+	code.push_back(CODE_OBJECT);
 }
 
 void type<::vnx::query::Field>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Field());
 }
 
+void type<::vnx::query::Field>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Field& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::GroupBy>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::GroupBy());
+}
+
+void type<::vnx::query::GroupBy>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::GroupBy& value, bool special) {
+	code.push_back(CODE_OBJECT);
 }
 
 void type<::vnx::query::Limit>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Limit());
 }
 
+void type<::vnx::query::Limit>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Limit& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::Max>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Max());
+}
+
+void type<::vnx::query::Max>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Max& value, bool special) {
+	code.push_back(CODE_OBJECT);
 }
 
 void type<::vnx::query::Min>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Min());
 }
 
+void type<::vnx::query::Min>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Min& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::OrderBy>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::OrderBy());
+}
+
+void type<::vnx::query::OrderBy>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::OrderBy& value, bool special) {
+	code.push_back(CODE_OBJECT);
 }
 
 void type<::vnx::query::Query>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Query());
 }
 
+void type<::vnx::query::Query>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Query& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::Select>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Select());
+}
+
+void type<::vnx::query::Select>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Select& value, bool special) {
+	code.push_back(CODE_OBJECT);
 }
 
 void type<::vnx::query::Sum>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Sum());
 }
 
+void type<::vnx::query::Sum>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Sum& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::Unary>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Unary());
+}
+
+void type<::vnx::query::Unary>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Unary& value, bool special) {
+	code.push_back(CODE_OBJECT);
 }
 
 void type<::vnx::query::Update>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Update());
 }
 
+void type<::vnx::query::Update>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Update& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::Value>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::Value());
 }
 
+void type<::vnx::query::Value>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Value& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::query::op_type_e>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::op_type_e());
+}
+
+void type<::vnx::query::op_type_e>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::op_type_e& value, bool special) {
+	if(!special || value.is_valid()) {
+		code.push_back(CODE_STRING);
+	} else {
+		code.push_back(CODE_UINT32);
+	}
 }
 
 

@@ -3,8 +3,8 @@
 
 #include <vnx/database/package.hxx>
 #include <vnx/database/Server_get_table_info_return.hxx>
-#include <vnx/Object.hpp>
 #include <vnx/Value.h>
+#include <vnx/database/table_info_t.hxx>
 
 #include <vnx/vnx.h>
 
@@ -14,7 +14,7 @@ namespace database {
 
 
 const vnx::Hash64 Server_get_table_info_return::VNX_TYPE_HASH(0x9f7132b593551548ull);
-const vnx::Hash64 Server_get_table_info_return::VNX_CODE_HASH(0xf383b131dbabbaa1ull);
+const vnx::Hash64 Server_get_table_info_return::VNX_CODE_HASH(0xc609d97bec0426dull);
 
 vnx::Hash64 Server_get_table_info_return::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -117,18 +117,20 @@ std::shared_ptr<vnx::TypeCode> Server_get_table_info_return::static_create_type_
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.database.Server.get_table_info.return";
 	type_code->type_hash = vnx::Hash64(0x9f7132b593551548ull);
-	type_code->code_hash = vnx::Hash64(0xf383b131dbabbaa1ull);
+	type_code->code_hash = vnx::Hash64(0xc609d97bec0426dull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->is_return = true;
 	type_code->native_size = sizeof(::vnx::database::Server_get_table_info_return);
 	type_code->create_value = []() -> std::shared_ptr<vnx::Value> { return std::make_shared<Server_get_table_info_return>(); };
+	type_code->depends.resize(1);
+	type_code->depends[0] = ::vnx::database::table_info_t::static_get_type_code();
 	type_code->fields.resize(1);
 	{
 		auto& field = type_code->fields[0];
 		field.is_extended = true;
 		field.name = "_ret_0";
-		field.code = {13, 3, 32, 24};
+		field.code = {12, 19, 0};
 	}
 	type_code->build();
 	return type_code;
@@ -171,6 +173,7 @@ void read(TypeInput& in, ::vnx::database::Server_get_table_info_return& value, c
 			}
 		}
 	}
+	in.read(type_code->total_field_size);
 	if(type_code->is_matched) {
 	}
 	for(const auto* _field : type_code->ext_fields) {

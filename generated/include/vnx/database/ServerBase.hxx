@@ -8,6 +8,7 @@
 #include <vnx/Hash128.hpp>
 #include <vnx/Module.h>
 #include <vnx/Object.hpp>
+#include <vnx/database/table_info_t.hxx>
 #include <vnx/query/Delete.hxx>
 #include <vnx/query/Select.hxx>
 #include <vnx/query/Update.hxx>
@@ -20,7 +21,9 @@ class ServerBase : public ::vnx::Module {
 public:
 	
 	std::string location = "data/";
-	int64_t block_size = 67108864;
+	std::string id_name = "id";
+	int64_t max_block_size = 67108864;
+	vnx::bool_t ignore_errors = false;
 	
 	typedef ::vnx::Module Super;
 	
@@ -67,7 +70,7 @@ protected:
 	virtual void delete_one(const std::string& table, const ::vnx::Hash128& id) = 0;
 	virtual void delete_many(const std::string& table, const std::vector<::vnx::Hash128>& ids) = 0;
 	virtual void truncate(const std::string& table) = 0;
-	virtual std::map<std::string, ::vnx::Object> get_table_info() const = 0;
+	virtual std::vector<::vnx::database::table_info_t> get_table_info() const = 0;
 	virtual void write_new_block() = 0;
 	
 	void vnx_handle_switch(std::shared_ptr<const vnx::Value> _value) override;

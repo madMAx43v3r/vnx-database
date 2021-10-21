@@ -42,6 +42,23 @@ void op_type_e::write(vnx::TypeOutput& _out, const vnx::TypeCode* _type_code, co
 	vnx::write(_out, *this, _type_code, _code);
 }
 
+vnx::bool_t op_type_e::is_valid() const {
+	switch(value) {
+		case AND: return true;
+		case EQUAL: return true;
+		case GREATER: return true;
+		case GREATER_EQUAL: return true;
+		case IS_NULL: return true;
+		case LESS: return true;
+		case LESS_EQUAL: return true;
+		case NOT: return true;
+		case NOT_EQUAL: return true;
+		case NOT_NULL: return true;
+		case OR: return true;
+	}
+	return false;
+}
+
 std::string op_type_e::to_string() const {
 	switch(value) {
 		case AND: return "\"AND\"";
@@ -300,7 +317,11 @@ void read(TypeInput& in, ::vnx::query::op_type_e& value, const TypeCode* type_co
 
 void write(TypeOutput& out, const ::vnx::query::op_type_e& value, const TypeCode* type_code, const uint16_t* code) {
 	if(code && code[0] == CODE_STRING) {
-		vnx::write(out, vnx::to_string_value(value), nullptr, code);
+		vnx::write(out, value.to_string_value(), nullptr, code);
+		return;
+	}
+	if(code && code[0] == CODE_UINT32) {
+		vnx::write(out, value.value, nullptr, code);
 		return;
 	}
 	if(!type_code || (code && code[0] == CODE_ANY)) {

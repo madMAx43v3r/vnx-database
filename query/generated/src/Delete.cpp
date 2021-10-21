@@ -188,6 +188,7 @@ void read(TypeInput& in, ::vnx::query::Delete& value, const TypeCode* type_code,
 			}
 		}
 	}
+	in.read(type_code->total_field_size);
 	if(type_code->is_matched) {
 	}
 	for(const auto* _field : type_code->ext_fields) {

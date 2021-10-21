@@ -171,6 +171,7 @@ void read(TypeInput& in, ::vnx::database::Server_select_many_return& value, cons
 			}
 		}
 	}
+	in.read(type_code->total_field_size);
 	if(type_code->is_matched) {
 	}
 	for(const auto* _field : type_code->ext_fields) {

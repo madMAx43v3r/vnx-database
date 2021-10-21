@@ -5,8 +5,8 @@
 #define INCLUDE_vnx_database_Server_get_table_info_return_HXX_
 
 #include <vnx/database/package.hxx>
-#include <vnx/Object.hpp>
 #include <vnx/Value.h>
+#include <vnx/database/table_info_t.hxx>
 
 
 namespace vnx {
@@ -15,7 +15,7 @@ namespace database {
 class Server_get_table_info_return : public ::vnx::Value {
 public:
 	
-	std::map<std::string, ::vnx::Object> _ret_0;
+	std::vector<::vnx::database::table_info_t> _ret_0;
 	
 	typedef ::vnx::Value Super;
 	
@@ -23,6 +23,8 @@ public:
 	static const vnx::Hash64 VNX_CODE_HASH;
 	
 	static constexpr uint64_t VNX_TYPE_ID = 0x9f7132b593551548ull;
+	
+	Server_get_table_info_return() {}
 	
 	vnx::Hash64 get_type_hash() const override;
 	std::string get_type_name() const override;

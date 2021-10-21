@@ -206,6 +206,7 @@ void read(TypeInput& in, ::vnx::database::Server_insert_one& value, const TypeCo
 			}
 		}
 	}
+	in.read(type_code->total_field_size);
 	if(type_code->is_matched) {
 	}
 	for(const auto* _field : type_code->ext_fields) {
