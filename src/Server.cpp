@@ -284,8 +284,10 @@ std::shared_ptr<const query::Expression> to_expression(const sqltoast::value_exp
 				}
 				out = func;
 			}
+			break;
 		}
-		// TODO
+		default:
+			throw std::logic_error("invalid value expression");
 	}
 	return out;
 }
@@ -462,8 +464,8 @@ Object aggregate(const query::Select& query, const std::vector<Object>& result) 
 	for(const auto& entry : query.aggregates) {
 		funcs[entry.first] = vnx::clone(entry.second);
 	}
-	for(const auto& object : result) {
-		for(auto& entry : funcs) {
+	for(auto& entry : funcs) {
+		for(const auto& object : result) {
 			entry.second->update(object);
 		}
 	}
