@@ -4,8 +4,8 @@
 #include <vnx/query/package.hxx>
 #include <vnx/query/Aggregate.hxx>
 #include <vnx/Object.hpp>
-#include <vnx/Value.h>
 #include <vnx/Variant.hpp>
+#include <vnx/query/Expression.hxx>
 
 #include <vnx/vnx.h>
 
@@ -15,7 +15,7 @@ namespace query {
 
 
 const vnx::Hash64 Aggregate::VNX_TYPE_HASH(0x1c9aa33b915b86dfull);
-const vnx::Hash64 Aggregate::VNX_CODE_HASH(0xe66775103290d335ull);
+const vnx::Hash64 Aggregate::VNX_CODE_HASH(0x3bd8e56dec08863eull);
 
 vnx::Hash64 Aggregate::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -103,10 +103,12 @@ std::shared_ptr<vnx::TypeCode> Aggregate::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.query.Aggregate";
 	type_code->type_hash = vnx::Hash64(0x1c9aa33b915b86dfull);
-	type_code->code_hash = vnx::Hash64(0xe66775103290d335ull);
+	type_code->code_hash = vnx::Hash64(0x3bd8e56dec08863eull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->native_size = sizeof(::vnx::query::Aggregate);
+	type_code->parents.resize(1);
+	type_code->parents[0] = ::vnx::query::Expression::static_get_type_code();
 	type_code->create_value = []() -> std::shared_ptr<vnx::Value> { return std::make_shared<Aggregate>(); };
 	type_code->build();
 	return type_code;

@@ -15,7 +15,7 @@ namespace query {
 
 
 const vnx::Hash64 Count::VNX_TYPE_HASH(0xcf067f1e523c9400ull);
-const vnx::Hash64 Count::VNX_CODE_HASH(0x3a79362c3e5b12aeull);
+const vnx::Hash64 Count::VNX_CODE_HASH(0x96004766252f43bcull);
 
 vnx::Hash64 Count::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -118,12 +118,13 @@ std::shared_ptr<vnx::TypeCode> Count::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.query.Count";
 	type_code->type_hash = vnx::Hash64(0xcf067f1e523c9400ull);
-	type_code->code_hash = vnx::Hash64(0x3a79362c3e5b12aeull);
+	type_code->code_hash = vnx::Hash64(0x96004766252f43bcull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->native_size = sizeof(::vnx::query::Count);
-	type_code->parents.resize(1);
+	type_code->parents.resize(2);
 	type_code->parents[0] = ::vnx::query::Aggregate::static_get_type_code();
+	type_code->parents[1] = ::vnx::query::Expression::static_get_type_code();
 	type_code->create_value = []() -> std::shared_ptr<vnx::Value> { return std::make_shared<Count>(); };
 	type_code->fields.resize(1);
 	{

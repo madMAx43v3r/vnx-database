@@ -59,6 +59,14 @@ public:
 			const std::function<void(const vnx::bool_t&)>& _callback = std::function<void(const vnx::bool_t&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
 	
+	uint64_t sql_query(const std::string& query = "", 
+			const std::function<void(const std::vector<::vnx::Object>&)>& _callback = std::function<void(const std::vector<::vnx::Object>&)>(),
+			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
+	
+	uint64_t sql_update(const std::string& query = "", 
+			const std::function<void()>& _callback = std::function<void()>(),
+			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
+	
 	uint64_t select(const ::vnx::query::Select& query = ::vnx::query::Select(), 
 			const std::function<void(const std::vector<::vnx::Object>&)>& _callback = std::function<void(const std::vector<::vnx::Object>&)>(),
 			const std::function<void(const vnx::exception&)>& _error_callback = std::function<void(const vnx::exception&)>());
@@ -130,6 +138,8 @@ private:
 	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_vnx_restart;
 	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_vnx_stop;
 	std::unordered_map<uint64_t, std::pair<std::function<void(const vnx::bool_t&)>, std::function<void(const vnx::exception&)>>> vnx_queue_vnx_self_test;
+	std::unordered_map<uint64_t, std::pair<std::function<void(const std::vector<::vnx::Object>&)>, std::function<void(const vnx::exception&)>>> vnx_queue_sql_query;
+	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_sql_update;
 	std::unordered_map<uint64_t, std::pair<std::function<void(const std::vector<::vnx::Object>&)>, std::function<void(const vnx::exception&)>>> vnx_queue_select;
 	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_update;
 	std::unordered_map<uint64_t, std::pair<std::function<void()>, std::function<void(const vnx::exception&)>>> vnx_queue_delete_from;

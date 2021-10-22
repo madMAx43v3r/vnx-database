@@ -58,6 +58,8 @@ public:
 protected:
 	using Super::handle;
 	
+	virtual std::vector<::vnx::Object> sql_query(const std::string& query) const = 0;
+	virtual void sql_update(const std::string& query) = 0;
 	virtual std::vector<::vnx::Object> select(const ::vnx::query::Select& query) const = 0;
 	virtual void update(const ::vnx::query::Update& query) = 0;
 	virtual void delete_from(const ::vnx::query::Delete& query) = 0;

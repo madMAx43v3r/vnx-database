@@ -42,6 +42,10 @@
 #include <vnx/database/Server_select_many_return.hxx>
 #include <vnx/database/Server_select_one.hxx>
 #include <vnx/database/Server_select_one_return.hxx>
+#include <vnx/database/Server_sql_query.hxx>
+#include <vnx/database/Server_sql_query_return.hxx>
+#include <vnx/database/Server_sql_update.hxx>
+#include <vnx/database/Server_sql_update_return.hxx>
 #include <vnx/database/Server_truncate.hxx>
 #include <vnx/database/Server_truncate_return.hxx>
 #include <vnx/database/Server_update.hxx>
@@ -186,13 +190,39 @@ uint64_t ServerAsyncClient::vnx_self_test(const std::function<void(const vnx::bo
 	return _request_id;
 }
 
+uint64_t ServerAsyncClient::sql_query(const std::string& query, const std::function<void(const std::vector<::vnx::Object>&)>& _callback, const std::function<void(const vnx::exception&)>& _error_callback) {
+	auto _method = ::vnx::database::Server_sql_query::create();
+	_method->query = query;
+	const auto _request_id = ++vnx_next_id;
+	{
+		std::lock_guard<std::mutex> _lock(vnx_mutex);
+		vnx_pending[_request_id] = 9;
+		vnx_queue_sql_query[_request_id] = std::make_pair(_callback, _error_callback);
+	}
+	vnx_request(_method, _request_id);
+	return _request_id;
+}
+
+uint64_t ServerAsyncClient::sql_update(const std::string& query, const std::function<void()>& _callback, const std::function<void(const vnx::exception&)>& _error_callback) {
+	auto _method = ::vnx::database::Server_sql_update::create();
+	_method->query = query;
+	const auto _request_id = ++vnx_next_id;
+	{
+		std::lock_guard<std::mutex> _lock(vnx_mutex);
+		vnx_pending[_request_id] = 10;
+		vnx_queue_sql_update[_request_id] = std::make_pair(_callback, _error_callback);
+	}
+	vnx_request(_method, _request_id);
+	return _request_id;
+}
+
 uint64_t ServerAsyncClient::select(const ::vnx::query::Select& query, const std::function<void(const std::vector<::vnx::Object>&)>& _callback, const std::function<void(const vnx::exception&)>& _error_callback) {
 	auto _method = ::vnx::database::Server_select::create();
 	_method->query = query;
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 9;
+		vnx_pending[_request_id] = 11;
 		vnx_queue_select[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -205,7 +235,7 @@ uint64_t ServerAsyncClient::update(const ::vnx::query::Update& query, const std:
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 10;
+		vnx_pending[_request_id] = 12;
 		vnx_queue_update[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -218,7 +248,7 @@ uint64_t ServerAsyncClient::delete_from(const ::vnx::query::Delete& query, const
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 11;
+		vnx_pending[_request_id] = 13;
 		vnx_queue_delete_from[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -232,7 +262,7 @@ uint64_t ServerAsyncClient::select_one(const std::string& table, const ::vnx::Ha
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 12;
+		vnx_pending[_request_id] = 14;
 		vnx_queue_select_one[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -246,7 +276,7 @@ uint64_t ServerAsyncClient::select_many(const std::string& table, const std::vec
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 13;
+		vnx_pending[_request_id] = 15;
 		vnx_queue_select_many[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -261,7 +291,7 @@ uint64_t ServerAsyncClient::insert_one(const std::string& table, const ::vnx::Ha
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 14;
+		vnx_pending[_request_id] = 16;
 		vnx_queue_insert_one[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -275,7 +305,7 @@ uint64_t ServerAsyncClient::insert_many(const std::string& table, const std::map
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 15;
+		vnx_pending[_request_id] = 17;
 		vnx_queue_insert_many[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -290,7 +320,7 @@ uint64_t ServerAsyncClient::update_one(const std::string& table, const ::vnx::Ha
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 16;
+		vnx_pending[_request_id] = 18;
 		vnx_queue_update_one[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -304,7 +334,7 @@ uint64_t ServerAsyncClient::update_many(const std::string& table, const std::map
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 17;
+		vnx_pending[_request_id] = 19;
 		vnx_queue_update_many[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -318,7 +348,7 @@ uint64_t ServerAsyncClient::delete_one(const std::string& table, const ::vnx::Ha
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 18;
+		vnx_pending[_request_id] = 20;
 		vnx_queue_delete_one[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -332,7 +362,7 @@ uint64_t ServerAsyncClient::delete_many(const std::string& table, const std::vec
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 19;
+		vnx_pending[_request_id] = 21;
 		vnx_queue_delete_many[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -345,7 +375,7 @@ uint64_t ServerAsyncClient::truncate(const std::string& table, const std::functi
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 20;
+		vnx_pending[_request_id] = 22;
 		vnx_queue_truncate[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -357,7 +387,7 @@ uint64_t ServerAsyncClient::get_table_info(const std::function<void(const std::v
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 21;
+		vnx_pending[_request_id] = 23;
 		vnx_queue_get_table_info[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -369,7 +399,7 @@ uint64_t ServerAsyncClient::write_new_block(const std::function<void()>& _callba
 	const auto _request_id = ++vnx_next_id;
 	{
 		std::lock_guard<std::mutex> _lock(vnx_mutex);
-		vnx_pending[_request_id] = 22;
+		vnx_pending[_request_id] = 24;
 		vnx_queue_write_new_block[_request_id] = std::make_pair(_callback, _error_callback);
 	}
 	vnx_request(_method, _request_id);
@@ -494,6 +524,30 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			break;
 		}
 		case 9: {
+			const auto _iter = vnx_queue_sql_query.find(_request_id);
+			if(_iter != vnx_queue_sql_query.end()) {
+				const auto _callback = std::move(_iter->second.second);
+				vnx_queue_sql_query.erase(_iter);
+				_lock.unlock();
+				if(_callback) {
+					_callback(_ex);
+				}
+			}
+			break;
+		}
+		case 10: {
+			const auto _iter = vnx_queue_sql_update.find(_request_id);
+			if(_iter != vnx_queue_sql_update.end()) {
+				const auto _callback = std::move(_iter->second.second);
+				vnx_queue_sql_update.erase(_iter);
+				_lock.unlock();
+				if(_callback) {
+					_callback(_ex);
+				}
+			}
+			break;
+		}
+		case 11: {
 			const auto _iter = vnx_queue_select.find(_request_id);
 			if(_iter != vnx_queue_select.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -505,7 +559,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 10: {
+		case 12: {
 			const auto _iter = vnx_queue_update.find(_request_id);
 			if(_iter != vnx_queue_update.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -517,7 +571,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 11: {
+		case 13: {
 			const auto _iter = vnx_queue_delete_from.find(_request_id);
 			if(_iter != vnx_queue_delete_from.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -529,7 +583,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 12: {
+		case 14: {
 			const auto _iter = vnx_queue_select_one.find(_request_id);
 			if(_iter != vnx_queue_select_one.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -541,7 +595,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 13: {
+		case 15: {
 			const auto _iter = vnx_queue_select_many.find(_request_id);
 			if(_iter != vnx_queue_select_many.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -553,7 +607,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 14: {
+		case 16: {
 			const auto _iter = vnx_queue_insert_one.find(_request_id);
 			if(_iter != vnx_queue_insert_one.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -565,7 +619,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 15: {
+		case 17: {
 			const auto _iter = vnx_queue_insert_many.find(_request_id);
 			if(_iter != vnx_queue_insert_many.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -577,7 +631,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 16: {
+		case 18: {
 			const auto _iter = vnx_queue_update_one.find(_request_id);
 			if(_iter != vnx_queue_update_one.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -589,7 +643,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 17: {
+		case 19: {
 			const auto _iter = vnx_queue_update_many.find(_request_id);
 			if(_iter != vnx_queue_update_many.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -601,7 +655,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 18: {
+		case 20: {
 			const auto _iter = vnx_queue_delete_one.find(_request_id);
 			if(_iter != vnx_queue_delete_one.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -613,7 +667,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 19: {
+		case 21: {
 			const auto _iter = vnx_queue_delete_many.find(_request_id);
 			if(_iter != vnx_queue_delete_many.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -625,7 +679,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 20: {
+		case 22: {
 			const auto _iter = vnx_queue_truncate.find(_request_id);
 			if(_iter != vnx_queue_truncate.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -637,7 +691,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 21: {
+		case 23: {
 			const auto _iter = vnx_queue_get_table_info.find(_request_id);
 			if(_iter != vnx_queue_get_table_info.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -649,7 +703,7 @@ int32_t ServerAsyncClient::vnx_purge_request(uint64_t _request_id, const vnx::ex
 			}
 			break;
 		}
-		case 22: {
+		case 24: {
 			const auto _iter = vnx_queue_write_new_block.find(_request_id);
 			if(_iter != vnx_queue_write_new_block.end()) {
 				const auto _callback = std::move(_iter->second.second);
@@ -822,6 +876,38 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			break;
 		}
 		case 9: {
+			const auto _iter = vnx_queue_sql_query.find(_request_id);
+			if(_iter == vnx_queue_sql_query.end()) {
+				throw std::runtime_error("ServerAsyncClient: callback not found");
+			}
+			const auto _callback = std::move(_iter->second.first);
+			vnx_queue_sql_query.erase(_iter);
+			_lock.unlock();
+			if(_callback) {
+				if(auto _result = std::dynamic_pointer_cast<const ::vnx::database::Server_sql_query_return>(_value)) {
+					_callback(_result->_ret_0);
+				} else if(_value && !_value->is_void()) {
+					_callback(_value->get_field_by_index(0).to<std::vector<::vnx::Object>>());
+				} else {
+					throw std::logic_error("ServerAsyncClient: invalid return value");
+				}
+			}
+			break;
+		}
+		case 10: {
+			const auto _iter = vnx_queue_sql_update.find(_request_id);
+			if(_iter == vnx_queue_sql_update.end()) {
+				throw std::runtime_error("ServerAsyncClient: callback not found");
+			}
+			const auto _callback = std::move(_iter->second.first);
+			vnx_queue_sql_update.erase(_iter);
+			_lock.unlock();
+			if(_callback) {
+				_callback();
+			}
+			break;
+		}
+		case 11: {
 			const auto _iter = vnx_queue_select.find(_request_id);
 			if(_iter == vnx_queue_select.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -840,7 +926,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 10: {
+		case 12: {
 			const auto _iter = vnx_queue_update.find(_request_id);
 			if(_iter == vnx_queue_update.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -853,7 +939,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 11: {
+		case 13: {
 			const auto _iter = vnx_queue_delete_from.find(_request_id);
 			if(_iter == vnx_queue_delete_from.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -866,7 +952,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 12: {
+		case 14: {
 			const auto _iter = vnx_queue_select_one.find(_request_id);
 			if(_iter == vnx_queue_select_one.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -885,7 +971,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 13: {
+		case 15: {
 			const auto _iter = vnx_queue_select_many.find(_request_id);
 			if(_iter == vnx_queue_select_many.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -904,7 +990,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 14: {
+		case 16: {
 			const auto _iter = vnx_queue_insert_one.find(_request_id);
 			if(_iter == vnx_queue_insert_one.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -917,7 +1003,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 15: {
+		case 17: {
 			const auto _iter = vnx_queue_insert_many.find(_request_id);
 			if(_iter == vnx_queue_insert_many.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -930,7 +1016,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 16: {
+		case 18: {
 			const auto _iter = vnx_queue_update_one.find(_request_id);
 			if(_iter == vnx_queue_update_one.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -943,7 +1029,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 17: {
+		case 19: {
 			const auto _iter = vnx_queue_update_many.find(_request_id);
 			if(_iter == vnx_queue_update_many.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -956,7 +1042,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 18: {
+		case 20: {
 			const auto _iter = vnx_queue_delete_one.find(_request_id);
 			if(_iter == vnx_queue_delete_one.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -969,7 +1055,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 19: {
+		case 21: {
 			const auto _iter = vnx_queue_delete_many.find(_request_id);
 			if(_iter == vnx_queue_delete_many.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -982,7 +1068,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 20: {
+		case 22: {
 			const auto _iter = vnx_queue_truncate.find(_request_id);
 			if(_iter == vnx_queue_truncate.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -995,7 +1081,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 21: {
+		case 23: {
 			const auto _iter = vnx_queue_get_table_info.find(_request_id);
 			if(_iter == vnx_queue_get_table_info.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");
@@ -1014,7 +1100,7 @@ int32_t ServerAsyncClient::vnx_callback_switch(uint64_t _request_id, std::shared
 			}
 			break;
 		}
-		case 22: {
+		case 24: {
 			const auto _iter = vnx_queue_write_new_block.find(_request_id);
 			if(_iter == vnx_queue_write_new_block.end()) {
 				throw std::runtime_error("ServerAsyncClient: callback not found");

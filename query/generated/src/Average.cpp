@@ -16,7 +16,7 @@ namespace query {
 
 
 const vnx::Hash64 Average::VNX_TYPE_HASH(0x17a49318275814c8ull);
-const vnx::Hash64 Average::VNX_CODE_HASH(0x2d9aa9154aa80255ull);
+const vnx::Hash64 Average::VNX_CODE_HASH(0x7928ede3eea70a35ull);
 
 vnx::Hash64 Average::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -139,12 +139,13 @@ std::shared_ptr<vnx::TypeCode> Average::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.query.Average";
 	type_code->type_hash = vnx::Hash64(0x17a49318275814c8ull);
-	type_code->code_hash = vnx::Hash64(0x2d9aa9154aa80255ull);
+	type_code->code_hash = vnx::Hash64(0x7928ede3eea70a35ull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->native_size = sizeof(::vnx::query::Average);
-	type_code->parents.resize(1);
+	type_code->parents.resize(2);
 	type_code->parents[0] = ::vnx::query::Aggregate::static_get_type_code();
+	type_code->parents[1] = ::vnx::query::Expression::static_get_type_code();
 	type_code->create_value = []() -> std::shared_ptr<vnx::Value> { return std::make_shared<Average>(); };
 	type_code->fields.resize(3);
 	{

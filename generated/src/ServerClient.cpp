@@ -42,6 +42,10 @@
 #include <vnx/database/Server_select_many_return.hxx>
 #include <vnx/database/Server_select_one.hxx>
 #include <vnx/database/Server_select_one_return.hxx>
+#include <vnx/database/Server_sql_query.hxx>
+#include <vnx/database/Server_sql_query_return.hxx>
+#include <vnx/database/Server_sql_update.hxx>
+#include <vnx/database/Server_sql_update_return.hxx>
 #include <vnx/database/Server_truncate.hxx>
 #include <vnx/database/Server_truncate_return.hxx>
 #include <vnx/database/Server_update.hxx>
@@ -179,6 +183,31 @@ vnx::bool_t ServerClient::vnx_self_test() {
 	} else {
 		throw std::logic_error("ServerClient: invalid return value");
 	}
+}
+
+std::vector<::vnx::Object> ServerClient::sql_query(const std::string& query) {
+	auto _method = ::vnx::database::Server_sql_query::create();
+	_method->query = query;
+	auto _return_value = vnx_request(_method, false);
+	if(auto _result = std::dynamic_pointer_cast<const ::vnx::database::Server_sql_query_return>(_return_value)) {
+		return _result->_ret_0;
+	} else if(_return_value && !_return_value->is_void()) {
+		return _return_value->get_field_by_index(0).to<std::vector<::vnx::Object>>();
+	} else {
+		throw std::logic_error("ServerClient: invalid return value");
+	}
+}
+
+void ServerClient::sql_update(const std::string& query) {
+	auto _method = ::vnx::database::Server_sql_update::create();
+	_method->query = query;
+	vnx_request(_method, false);
+}
+
+void ServerClient::sql_update_async(const std::string& query) {
+	auto _method = ::vnx::database::Server_sql_update::create();
+	_method->query = query;
+	vnx_request(_method, true);
 }
 
 std::vector<::vnx::Object> ServerClient::select(const ::vnx::query::Select& query) {

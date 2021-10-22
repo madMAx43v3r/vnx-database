@@ -16,7 +16,7 @@ namespace query {
 
 
 const vnx::Hash64 Sum::VNX_TYPE_HASH(0x7ec40912aaea9d4full);
-const vnx::Hash64 Sum::VNX_CODE_HASH(0xe69f4ba7fbeeb7bfull);
+const vnx::Hash64 Sum::VNX_CODE_HASH(0x175892bab7ec4a2dull);
 
 vnx::Hash64 Sum::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -129,12 +129,13 @@ std::shared_ptr<vnx::TypeCode> Sum::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.query.Sum";
 	type_code->type_hash = vnx::Hash64(0x7ec40912aaea9d4full);
-	type_code->code_hash = vnx::Hash64(0xe69f4ba7fbeeb7bfull);
+	type_code->code_hash = vnx::Hash64(0x175892bab7ec4a2dull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->native_size = sizeof(::vnx::query::Sum);
-	type_code->parents.resize(1);
+	type_code->parents.resize(2);
 	type_code->parents[0] = ::vnx::query::Aggregate::static_get_type_code();
+	type_code->parents[1] = ::vnx::query::Expression::static_get_type_code();
 	type_code->create_value = []() -> std::shared_ptr<vnx::Value> { return std::make_shared<Sum>(); };
 	type_code->fields.resize(2);
 	{

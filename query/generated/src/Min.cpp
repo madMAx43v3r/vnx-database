@@ -16,7 +16,7 @@ namespace query {
 
 
 const vnx::Hash64 Min::VNX_TYPE_HASH(0xf5c5d495ee64b93eull);
-const vnx::Hash64 Min::VNX_CODE_HASH(0x3f43a2a7c9dd140full);
+const vnx::Hash64 Min::VNX_CODE_HASH(0xce847bba85dfe99dull);
 
 vnx::Hash64 Min::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -129,12 +129,13 @@ std::shared_ptr<vnx::TypeCode> Min::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.query.Min";
 	type_code->type_hash = vnx::Hash64(0xf5c5d495ee64b93eull);
-	type_code->code_hash = vnx::Hash64(0x3f43a2a7c9dd140full);
+	type_code->code_hash = vnx::Hash64(0xce847bba85dfe99dull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->native_size = sizeof(::vnx::query::Min);
-	type_code->parents.resize(1);
+	type_code->parents.resize(2);
 	type_code->parents[0] = ::vnx::query::Aggregate::static_get_type_code();
+	type_code->parents[1] = ::vnx::query::Expression::static_get_type_code();
 	type_code->create_value = []() -> std::shared_ptr<vnx::Value> { return std::make_shared<Min>(); };
 	type_code->fields.resize(2);
 	{

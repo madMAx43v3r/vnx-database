@@ -43,6 +43,10 @@
 #include <vnx/database/Server_select_many_return.hxx>
 #include <vnx/database/Server_select_one.hxx>
 #include <vnx/database/Server_select_one_return.hxx>
+#include <vnx/database/Server_sql_query.hxx>
+#include <vnx/database/Server_sql_query_return.hxx>
+#include <vnx/database/Server_sql_update.hxx>
+#include <vnx/database/Server_sql_update_return.hxx>
 #include <vnx/database/Server_truncate.hxx>
 #include <vnx/database/Server_truncate_return.hxx>
 #include <vnx/database/Server_update.hxx>
@@ -195,7 +199,7 @@ std::shared_ptr<vnx::TypeCode> ServerBase::static_create_type_code() {
 	type_code->code_hash = vnx::Hash64(0xd8904f711812748ull);
 	type_code->is_native = true;
 	type_code->native_size = sizeof(::vnx::database::ServerBase);
-	type_code->methods.resize(23);
+	type_code->methods.resize(25);
 	type_code->methods[0] = ::vnx::ModuleInterface_vnx_get_config_object::static_get_type_code();
 	type_code->methods[1] = ::vnx::ModuleInterface_vnx_get_config::static_get_type_code();
 	type_code->methods[2] = ::vnx::ModuleInterface_vnx_set_config_object::static_get_type_code();
@@ -205,20 +209,22 @@ std::shared_ptr<vnx::TypeCode> ServerBase::static_create_type_code() {
 	type_code->methods[6] = ::vnx::ModuleInterface_vnx_restart::static_get_type_code();
 	type_code->methods[7] = ::vnx::ModuleInterface_vnx_stop::static_get_type_code();
 	type_code->methods[8] = ::vnx::ModuleInterface_vnx_self_test::static_get_type_code();
-	type_code->methods[9] = ::vnx::database::Server_select::static_get_type_code();
-	type_code->methods[10] = ::vnx::database::Server_update::static_get_type_code();
-	type_code->methods[11] = ::vnx::database::Server_delete_from::static_get_type_code();
-	type_code->methods[12] = ::vnx::database::Server_select_one::static_get_type_code();
-	type_code->methods[13] = ::vnx::database::Server_select_many::static_get_type_code();
-	type_code->methods[14] = ::vnx::database::Server_insert_one::static_get_type_code();
-	type_code->methods[15] = ::vnx::database::Server_insert_many::static_get_type_code();
-	type_code->methods[16] = ::vnx::database::Server_update_one::static_get_type_code();
-	type_code->methods[17] = ::vnx::database::Server_update_many::static_get_type_code();
-	type_code->methods[18] = ::vnx::database::Server_delete_one::static_get_type_code();
-	type_code->methods[19] = ::vnx::database::Server_delete_many::static_get_type_code();
-	type_code->methods[20] = ::vnx::database::Server_truncate::static_get_type_code();
-	type_code->methods[21] = ::vnx::database::Server_get_table_info::static_get_type_code();
-	type_code->methods[22] = ::vnx::database::Server_write_new_block::static_get_type_code();
+	type_code->methods[9] = ::vnx::database::Server_sql_query::static_get_type_code();
+	type_code->methods[10] = ::vnx::database::Server_sql_update::static_get_type_code();
+	type_code->methods[11] = ::vnx::database::Server_select::static_get_type_code();
+	type_code->methods[12] = ::vnx::database::Server_update::static_get_type_code();
+	type_code->methods[13] = ::vnx::database::Server_delete_from::static_get_type_code();
+	type_code->methods[14] = ::vnx::database::Server_select_one::static_get_type_code();
+	type_code->methods[15] = ::vnx::database::Server_select_many::static_get_type_code();
+	type_code->methods[16] = ::vnx::database::Server_insert_one::static_get_type_code();
+	type_code->methods[17] = ::vnx::database::Server_insert_many::static_get_type_code();
+	type_code->methods[18] = ::vnx::database::Server_update_one::static_get_type_code();
+	type_code->methods[19] = ::vnx::database::Server_update_many::static_get_type_code();
+	type_code->methods[20] = ::vnx::database::Server_delete_one::static_get_type_code();
+	type_code->methods[21] = ::vnx::database::Server_delete_many::static_get_type_code();
+	type_code->methods[22] = ::vnx::database::Server_truncate::static_get_type_code();
+	type_code->methods[23] = ::vnx::database::Server_get_table_info::static_get_type_code();
+	type_code->methods[24] = ::vnx::database::Server_write_new_block::static_get_type_code();
 	type_code->fields.resize(4);
 	{
 		auto& field = type_code->fields[0];
@@ -317,6 +323,18 @@ std::shared_ptr<vnx::Value> ServerBase::vnx_call_switch(std::shared_ptr<const vn
 			auto _args = std::static_pointer_cast<const ::vnx::ModuleInterface_vnx_self_test>(_method);
 			auto _return_value = ::vnx::ModuleInterface_vnx_self_test_return::create();
 			_return_value->_ret_0 = vnx_self_test();
+			return _return_value;
+		}
+		case 0x8c702a2c05b83e2full: {
+			auto _args = std::static_pointer_cast<const ::vnx::database::Server_sql_query>(_method);
+			auto _return_value = ::vnx::database::Server_sql_query_return::create();
+			_return_value->_ret_0 = sql_query(_args->query);
+			return _return_value;
+		}
+		case 0xde725a318e4254a5ull: {
+			auto _args = std::static_pointer_cast<const ::vnx::database::Server_sql_update>(_method);
+			auto _return_value = ::vnx::database::Server_sql_update_return::create();
+			sql_update(_args->query);
 			return _return_value;
 		}
 		case 0xc5f091df45ac99eaull: {

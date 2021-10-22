@@ -8,6 +8,7 @@
 #include <vnx/query/Delete.hxx>
 #include <vnx/query/Expression.hxx>
 #include <vnx/query/Field.hxx>
+#include <vnx/query/Function.hxx>
 #include <vnx/query/GroupBy.hxx>
 #include <vnx/query/Limit.hxx>
 #include <vnx/query/Max.hxx>
@@ -19,6 +20,7 @@
 #include <vnx/query/Unary.hxx>
 #include <vnx/query/Update.hxx>
 #include <vnx/query/Value.hxx>
+#include <vnx/query/func_type_e.hxx>
 #include <vnx/query/op_type_e.hxx>
 
 #include <vnx/query/package.hxx>
@@ -81,6 +83,14 @@ void type<::vnx::query::Field>::create_dynamic_code(std::vector<uint16_t>& code)
 }
 
 void type<::vnx::query::Field>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Field& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
+void type<::vnx::query::Function>::create_dynamic_code(std::vector<uint16_t>& code) {
+	create_dynamic_code(code, ::vnx::query::Function());
+}
+
+void type<::vnx::query::Function>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::Function& value, bool special) {
 	code.push_back(CODE_OBJECT);
 }
 
@@ -172,6 +182,18 @@ void type<::vnx::query::Value>::create_dynamic_code(std::vector<uint16_t>& code,
 	code.push_back(CODE_OBJECT);
 }
 
+void type<::vnx::query::func_type_e>::create_dynamic_code(std::vector<uint16_t>& code) {
+	create_dynamic_code(code, ::vnx::query::func_type_e());
+}
+
+void type<::vnx::query::func_type_e>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::query::func_type_e& value, bool special) {
+	if(!special || value.is_valid()) {
+		code.push_back(CODE_STRING);
+	} else {
+		code.push_back(CODE_UINT32);
+	}
+}
+
 void type<::vnx::query::op_type_e>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::query::op_type_e());
 }
@@ -200,6 +222,7 @@ static void register_all_types() {
 	vnx::register_type_code(::vnx::query::Delete::static_create_type_code());
 	vnx::register_type_code(::vnx::query::Expression::static_create_type_code());
 	vnx::register_type_code(::vnx::query::Field::static_create_type_code());
+	vnx::register_type_code(::vnx::query::Function::static_create_type_code());
 	vnx::register_type_code(::vnx::query::GroupBy::static_create_type_code());
 	vnx::register_type_code(::vnx::query::Limit::static_create_type_code());
 	vnx::register_type_code(::vnx::query::Max::static_create_type_code());
@@ -211,6 +234,7 @@ static void register_all_types() {
 	vnx::register_type_code(::vnx::query::Unary::static_create_type_code());
 	vnx::register_type_code(::vnx::query::Update::static_create_type_code());
 	vnx::register_type_code(::vnx::query::Value::static_create_type_code());
+	vnx::register_type_code(::vnx::query::func_type_e::static_create_type_code());
 	vnx::register_type_code(::vnx::query::op_type_e::static_create_type_code());
 }
 
@@ -227,6 +251,7 @@ const vnx::TypeCode* const vnx_native_type_code_Count = vnx::get_type_code(vnx::
 const vnx::TypeCode* const vnx_native_type_code_Delete = vnx::get_type_code(vnx::Hash64(0x853234401f1c6b4full));
 const vnx::TypeCode* const vnx_native_type_code_Expression = vnx::get_type_code(vnx::Hash64(0x7bc4190eadb27d64ull));
 const vnx::TypeCode* const vnx_native_type_code_Field = vnx::get_type_code(vnx::Hash64(0x3c675ff36d258a82ull));
+const vnx::TypeCode* const vnx_native_type_code_Function = vnx::get_type_code(vnx::Hash64(0x7bcc063cdbb6f12dull));
 const vnx::TypeCode* const vnx_native_type_code_GroupBy = vnx::get_type_code(vnx::Hash64(0xbc2edcf64acd47a7ull));
 const vnx::TypeCode* const vnx_native_type_code_Limit = vnx::get_type_code(vnx::Hash64(0x50b7cff9906dd669ull));
 const vnx::TypeCode* const vnx_native_type_code_Max = vnx::get_type_code(vnx::Hash64(0x1728bd90ff0d8af8ull));
@@ -238,6 +263,7 @@ const vnx::TypeCode* const vnx_native_type_code_Sum = vnx::get_type_code(vnx::Ha
 const vnx::TypeCode* const vnx_native_type_code_Unary = vnx::get_type_code(vnx::Hash64(0xc3bf356643366557ull));
 const vnx::TypeCode* const vnx_native_type_code_Update = vnx::get_type_code(vnx::Hash64(0xb6864eac29604e6cull));
 const vnx::TypeCode* const vnx_native_type_code_Value = vnx::get_type_code(vnx::Hash64(0xfd3aaed370d889c1ull));
+const vnx::TypeCode* const vnx_native_type_code_func_type_e = vnx::get_type_code(vnx::Hash64(0x3cddce20ab7c4271ull));
 const vnx::TypeCode* const vnx_native_type_code_op_type_e = vnx::get_type_code(vnx::Hash64(0xe97243d6947b0e63ull));
 
 } // namespace vnx

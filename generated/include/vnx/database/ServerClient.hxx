@@ -49,6 +49,12 @@ public:
 	
 	vnx::bool_t vnx_self_test();
 	
+	std::vector<::vnx::Object> sql_query(const std::string& query = "");
+	
+	void sql_update(const std::string& query = "");
+	
+	void sql_update_async(const std::string& query = "");
+	
 	std::vector<::vnx::Object> select(const ::vnx::query::Select& query = ::vnx::query::Select());
 	
 	void update(const ::vnx::query::Update& query = ::vnx::query::Update());

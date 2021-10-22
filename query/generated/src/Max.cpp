@@ -16,7 +16,7 @@ namespace query {
 
 
 const vnx::Hash64 Max::VNX_TYPE_HASH(0x1728bd90ff0d8af8ull);
-const vnx::Hash64 Max::VNX_CODE_HASH(0xf9a0127ab8ccd211ull);
+const vnx::Hash64 Max::VNX_CODE_HASH(0x867cb67f4ce2f83ull);
 
 vnx::Hash64 Max::get_type_hash() const {
 	return VNX_TYPE_HASH;
@@ -129,12 +129,13 @@ std::shared_ptr<vnx::TypeCode> Max::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.query.Max";
 	type_code->type_hash = vnx::Hash64(0x1728bd90ff0d8af8ull);
-	type_code->code_hash = vnx::Hash64(0xf9a0127ab8ccd211ull);
+	type_code->code_hash = vnx::Hash64(0x867cb67f4ce2f83ull);
 	type_code->is_native = true;
 	type_code->is_class = true;
 	type_code->native_size = sizeof(::vnx::query::Max);
-	type_code->parents.resize(1);
+	type_code->parents.resize(2);
 	type_code->parents[0] = ::vnx::query::Aggregate::static_get_type_code();
+	type_code->parents[1] = ::vnx::query::Expression::static_get_type_code();
 	type_code->create_value = []() -> std::shared_ptr<vnx::Value> { return std::make_shared<Max>(); };
 	type_code->fields.resize(2);
 	{

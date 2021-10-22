@@ -21,6 +21,10 @@
 #include <vnx/database/Server_select_many_return.hxx>
 #include <vnx/database/Server_select_one.hxx>
 #include <vnx/database/Server_select_one_return.hxx>
+#include <vnx/database/Server_sql_query.hxx>
+#include <vnx/database/Server_sql_query_return.hxx>
+#include <vnx/database/Server_sql_update.hxx>
+#include <vnx/database/Server_sql_update_return.hxx>
 #include <vnx/database/Server_truncate.hxx>
 #include <vnx/database/Server_truncate_return.hxx>
 #include <vnx/database/Server_update.hxx>
@@ -193,6 +197,38 @@ void type<::vnx::database::Server_select_one_return>::create_dynamic_code(std::v
 	code.push_back(CODE_OBJECT);
 }
 
+void type<::vnx::database::Server_sql_query>::create_dynamic_code(std::vector<uint16_t>& code) {
+	create_dynamic_code(code, ::vnx::database::Server_sql_query());
+}
+
+void type<::vnx::database::Server_sql_query>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_sql_query& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
+void type<::vnx::database::Server_sql_query_return>::create_dynamic_code(std::vector<uint16_t>& code) {
+	create_dynamic_code(code, ::vnx::database::Server_sql_query_return());
+}
+
+void type<::vnx::database::Server_sql_query_return>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_sql_query_return& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
+void type<::vnx::database::Server_sql_update>::create_dynamic_code(std::vector<uint16_t>& code) {
+	create_dynamic_code(code, ::vnx::database::Server_sql_update());
+}
+
+void type<::vnx::database::Server_sql_update>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_sql_update& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
+void type<::vnx::database::Server_sql_update_return>::create_dynamic_code(std::vector<uint16_t>& code) {
+	create_dynamic_code(code, ::vnx::database::Server_sql_update_return());
+}
+
+void type<::vnx::database::Server_sql_update_return>::create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_sql_update_return& value, bool special) {
+	code.push_back(CODE_OBJECT);
+}
+
 void type<::vnx::database::Server_truncate>::create_dynamic_code(std::vector<uint16_t>& code) {
 	create_dynamic_code(code, ::vnx::database::Server_truncate());
 }
@@ -318,6 +354,10 @@ static void register_all_types() {
 	vnx::register_type_code(::vnx::database::Server_select_many_return::static_create_type_code());
 	vnx::register_type_code(::vnx::database::Server_select_one::static_create_type_code());
 	vnx::register_type_code(::vnx::database::Server_select_one_return::static_create_type_code());
+	vnx::register_type_code(::vnx::database::Server_sql_query::static_create_type_code());
+	vnx::register_type_code(::vnx::database::Server_sql_query_return::static_create_type_code());
+	vnx::register_type_code(::vnx::database::Server_sql_update::static_create_type_code());
+	vnx::register_type_code(::vnx::database::Server_sql_update_return::static_create_type_code());
 	vnx::register_type_code(::vnx::database::Server_truncate::static_create_type_code());
 	vnx::register_type_code(::vnx::database::Server_truncate_return::static_create_type_code());
 	vnx::register_type_code(::vnx::database::Server_update::static_create_type_code());
@@ -358,6 +398,10 @@ const vnx::TypeCode* const vnx_native_type_code_Server_select_many = vnx::get_ty
 const vnx::TypeCode* const vnx_native_type_code_Server_select_many_return = vnx::get_type_code(vnx::Hash64(0xb955d3f12fc9f9e4ull));
 const vnx::TypeCode* const vnx_native_type_code_Server_select_one = vnx::get_type_code(vnx::Hash64(0x22221bf39d9159c2ull));
 const vnx::TypeCode* const vnx_native_type_code_Server_select_one_return = vnx::get_type_code(vnx::Hash64(0x1d53b50ff24a2658ull));
+const vnx::TypeCode* const vnx_native_type_code_Server_sql_query = vnx::get_type_code(vnx::Hash64(0x8c702a2c05b83e2full));
+const vnx::TypeCode* const vnx_native_type_code_Server_sql_query_return = vnx::get_type_code(vnx::Hash64(0x430b211e01f711e8ull));
+const vnx::TypeCode* const vnx_native_type_code_Server_sql_update = vnx::get_type_code(vnx::Hash64(0xde725a318e4254a5ull));
+const vnx::TypeCode* const vnx_native_type_code_Server_sql_update_return = vnx::get_type_code(vnx::Hash64(0xd64bf6ad7b3c4c20ull));
 const vnx::TypeCode* const vnx_native_type_code_Server_truncate = vnx::get_type_code(vnx::Hash64(0x5503f4f9957a4ffdull));
 const vnx::TypeCode* const vnx_native_type_code_Server_truncate_return = vnx::get_type_code(vnx::Hash64(0x7733379e1b956644ull));
 const vnx::TypeCode* const vnx_native_type_code_Server_update = vnx::get_type_code(vnx::Hash64(0xc19ad2535b3c3424ull));

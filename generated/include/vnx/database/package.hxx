@@ -33,6 +33,10 @@ class Server_select_many;
 class Server_select_many_return;
 class Server_select_one;
 class Server_select_one_return;
+class Server_sql_query;
+class Server_sql_query_return;
+class Server_sql_update;
+class Server_sql_update_return;
 class Server_truncate;
 class Server_truncate_return;
 class Server_update;
@@ -66,6 +70,10 @@ extern const vnx::TypeCode* const vnx_native_type_code_Server_select_many; ///< 
 extern const vnx::TypeCode* const vnx_native_type_code_Server_select_many_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_select_one; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_select_one_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Server_sql_query; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Server_sql_query_return; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Server_sql_update; ///< \private
+extern const vnx::TypeCode* const vnx_native_type_code_Server_sql_update_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_truncate; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_truncate_return; ///< \private
 extern const vnx::TypeCode* const vnx_native_type_code_Server_update; ///< \private
@@ -105,6 +113,10 @@ void read(TypeInput& in, ::vnx::database::Server_select_many& value, const TypeC
 void read(TypeInput& in, ::vnx::database::Server_select_many_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_select_one& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_select_one_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::database::Server_sql_query& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::database::Server_sql_query_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::database::Server_sql_update& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void read(TypeInput& in, ::vnx::database::Server_sql_update_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_truncate& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_truncate_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void read(TypeInput& in, ::vnx::database::Server_update& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -138,6 +150,10 @@ void write(TypeOutput& out, const ::vnx::database::Server_select_many& value, co
 void write(TypeOutput& out, const ::vnx::database::Server_select_many_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_select_one& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_select_one_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::database::Server_sql_query& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::database::Server_sql_query_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::database::Server_sql_update& value, const TypeCode* type_code, const uint16_t* code); ///< \private
+void write(TypeOutput& out, const ::vnx::database::Server_sql_update_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_truncate& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_truncate_return& value, const TypeCode* type_code, const uint16_t* code); ///< \private
 void write(TypeOutput& out, const ::vnx::database::Server_update& value, const TypeCode* type_code, const uint16_t* code); ///< \private
@@ -171,6 +187,10 @@ void read(std::istream& in, ::vnx::database::Server_select_many& value); ///< \p
 void read(std::istream& in, ::vnx::database::Server_select_many_return& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_select_one& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_select_one_return& value); ///< \private
+void read(std::istream& in, ::vnx::database::Server_sql_query& value); ///< \private
+void read(std::istream& in, ::vnx::database::Server_sql_query_return& value); ///< \private
+void read(std::istream& in, ::vnx::database::Server_sql_update& value); ///< \private
+void read(std::istream& in, ::vnx::database::Server_sql_update_return& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_truncate& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_truncate_return& value); ///< \private
 void read(std::istream& in, ::vnx::database::Server_update& value); ///< \private
@@ -204,6 +224,10 @@ void write(std::ostream& out, const ::vnx::database::Server_select_many& value);
 void write(std::ostream& out, const ::vnx::database::Server_select_many_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_select_one& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_select_one_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::database::Server_sql_query& value); ///< \private
+void write(std::ostream& out, const ::vnx::database::Server_sql_query_return& value); ///< \private
+void write(std::ostream& out, const ::vnx::database::Server_sql_update& value); ///< \private
+void write(std::ostream& out, const ::vnx::database::Server_sql_update_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_truncate& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_truncate_return& value); ///< \private
 void write(std::ostream& out, const ::vnx::database::Server_update& value); ///< \private
@@ -237,6 +261,10 @@ void accept(Visitor& visitor, const ::vnx::database::Server_select_many& value);
 void accept(Visitor& visitor, const ::vnx::database::Server_select_many_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_select_one& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_select_one_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::database::Server_sql_query& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::database::Server_sql_query_return& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::database::Server_sql_update& value); ///< \private
+void accept(Visitor& visitor, const ::vnx::database::Server_sql_update_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_truncate& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_truncate_return& value); ///< \private
 void accept(Visitor& visitor, const ::vnx::database::Server_update& value); ///< \private
@@ -686,6 +714,94 @@ struct type<::vnx::database::Server_select_one_return> {
 	}
 	void create_dynamic_code(std::vector<uint16_t>& code);
 	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_select_one_return& value, bool special = false);
+};
+
+/// \private
+template<>
+struct type<::vnx::database::Server_sql_query> {
+	void read(TypeInput& in, ::vnx::database::Server_sql_query& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::database::Server_sql_query& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::database::Server_sql_query& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::database::Server_sql_query& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::database::Server_sql_query& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_sql_query& value, bool special = false);
+};
+
+/// \private
+template<>
+struct type<::vnx::database::Server_sql_query_return> {
+	void read(TypeInput& in, ::vnx::database::Server_sql_query_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::database::Server_sql_query_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::database::Server_sql_query_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::database::Server_sql_query_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::database::Server_sql_query_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_sql_query_return& value, bool special = false);
+};
+
+/// \private
+template<>
+struct type<::vnx::database::Server_sql_update> {
+	void read(TypeInput& in, ::vnx::database::Server_sql_update& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::database::Server_sql_update& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::database::Server_sql_update& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::database::Server_sql_update& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::database::Server_sql_update& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_sql_update& value, bool special = false);
+};
+
+/// \private
+template<>
+struct type<::vnx::database::Server_sql_update_return> {
+	void read(TypeInput& in, ::vnx::database::Server_sql_update_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::read(in, value, type_code, code);
+	}
+	void write(TypeOutput& out, const ::vnx::database::Server_sql_update_return& value, const TypeCode* type_code, const uint16_t* code) {
+		vnx::write(out, value, type_code, code);
+	}
+	void read(std::istream& in, ::vnx::database::Server_sql_update_return& value) {
+		vnx::read(in, value);
+	}
+	void write(std::ostream& out, const ::vnx::database::Server_sql_update_return& value) {
+		vnx::write(out, value);
+	}
+	void accept(Visitor& visitor, const ::vnx::database::Server_sql_update_return& value) {
+		vnx::accept(visitor, value);
+	}
+	void create_dynamic_code(std::vector<uint16_t>& code);
+	void create_dynamic_code(std::vector<uint16_t>& code, const ::vnx::database::Server_sql_update_return& value, bool special = false);
 };
 
 /// \private
