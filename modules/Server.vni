@@ -11,6 +11,8 @@ module Server {
 	
 	long max_block_size = 67108864;		// [bytes]
 	
+	bool show_queries = false;
+	
 	bool ignore_errors = false;			// if to ignore data corruption on load
 	
 	

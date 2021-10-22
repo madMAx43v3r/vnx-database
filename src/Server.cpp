@@ -138,12 +138,44 @@ std::string to_string(const sqltoast::lexeme_t& word) {
 	return std::string(word.start, word.end);
 }
 
-std::shared_ptr<const query::Expression> to_expression(const sqltoast::numeric_term_t* value) {
-	if(!value) {
-		throw std::logic_error("!value");
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::value_expression_primary_t* value);
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::numeric_factor_t* factor) {
+	if(!factor) {
+		throw std::logic_error("!factor");
 	}
 	std::shared_ptr<const query::Expression> out;
-	// TODO
+	if(auto primary = factor->primary.get()) {
+		switch(primary->type) {
+			case sqltoast::NUMERIC_PRIMARY_TYPE_VALUE: {
+				auto value = static_cast<const sqltoast::numeric_value_t*>(primary);
+				if(auto primary = value->primary.get()) {
+					out = to_expression(primary);
+				}
+				break;
+			}
+			default:
+				throw std::logic_error("unsupported numeric function");
+		}
+	}
+	return out;
+}
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::numeric_term_t* term) {
+	if(!term) {
+		throw std::logic_error("!term");
+	}
+	std::shared_ptr<const query::Expression> out;
+	if(term->op == sqltoast::NUMERIC_OP_NONE) {
+		out = to_expression(term->left.get());
+	} else {
+		auto func = query::Function::create();
+		switch(term->op) {
+			default:
+				throw std::logic_error("unsupported numeric function");
+		}
+		out = func;
+	}
 	return out;
 }
 
@@ -242,12 +274,15 @@ std::shared_ptr<const query::Expression> to_expression(const sqltoast::value_exp
 		}
 		case sqltoast::VALUE_EXPRESSION_TYPE_NUMERIC_EXPRESSION: {
 			auto ex = static_cast<const sqltoast::numeric_expression*>(value);
-			auto comp = query::Comparison::create();
-			comp->L = to_expression(ex->left.get());
-			comp->R = to_expression(ex->right.get());
-			switch(ex->op) {
-				default:
-					throw std::logic_error("unsupported numeric expression");
+			if(ex->op == sqltoast::NUMERIC_OP_NONE) {
+				out = to_expression(ex->left.get());
+			} else {
+				auto func = query::Function::create();
+				switch(ex->op) {
+					default:
+						throw std::logic_error("unsupported numeric expression");
+				}
+				out = func;
 			}
 		}
 		// TODO
@@ -375,15 +410,19 @@ std::vector<Object> Server::sql_query(const std::string& query) const {
 				if(auto query = stmt->query.get()) {
 					int index = 0;
 					for(const auto& field : query->selected_columns) {
-						auto ex = to_expression(field.value.get());
-						auto alias = to_string(field.alias);
-						if(alias.empty()) {
-							alias = "_" + std::to_string(index);
-						}
-						if(auto agg = std::dynamic_pointer_cast<const query::Aggregate>(ex)) {
-							new_query.aggregates[alias] = agg;
-						} else {
-							new_query.fields[alias] = ex;
+						if(auto value = field.value.get()) {
+							auto ex = to_expression(value);
+							std::string alias;
+							if(field.has_alias()) {
+								alias = to_string(field.alias);
+							} else {
+								alias = ex->as_string();
+							}
+							if(auto agg = std::dynamic_pointer_cast<const query::Aggregate>(ex)) {
+								new_query.aggregates[alias] = agg;
+							} else {
+								new_query.fields[alias] = ex;
+							}
 						}
 						index++;
 					}
@@ -402,7 +441,9 @@ std::vector<Object> Server::sql_query(const std::string& query) const {
 						}
 					}
 				}
-				log(INFO) << new_query.as_string();
+				if(show_queries) {
+					log(INFO) << new_query.as_string();
+				}
 				const auto rows = select(new_query);
 				out.insert(out.end(), rows.begin(), rows.end());
 				break;
