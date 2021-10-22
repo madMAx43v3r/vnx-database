@@ -300,8 +300,8 @@ std::shared_ptr<const query::Expression> to_expression(const sqltoast::row_value
 			auto element = static_cast<const sqltoast::row_value_constructor_element_t*>(value);
 			switch(element->rvc_element_type) {
 				case sqltoast::RVC_ELEMENT_TYPE_VALUE_EXPRESSION: {
-					auto value = static_cast<const sqltoast::row_value_expression_t*>(element);
-					out = to_expression(value);
+					auto ex = static_cast<const sqltoast::row_value_expression_t*>(element);
+					out = to_expression(ex->value.get());
 					break;
 				}
 				default:
@@ -454,7 +454,7 @@ std::vector<Object> Server::sql_query(const std::string& query) const {
 }
 
 void Server::sql_update(const std::string& query) {
-	//
+	// TODO
 }
 
 Object aggregate(const query::Select& query, const std::vector<Object>& result) {
