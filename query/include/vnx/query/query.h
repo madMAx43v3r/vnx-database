@@ -12,6 +12,7 @@
 #include <vnx/query/Value.hxx>
 #include <vnx/query/Unary.hxx>
 #include <vnx/query/Comparison.hxx>
+#include <vnx/query/Function.hxx>
 #include <vnx/query/Aggregate.hxx>
 #include <vnx/query/Min.hxx>
 #include <vnx/query/Max.hxx>

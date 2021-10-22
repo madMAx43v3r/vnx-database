@@ -51,6 +51,11 @@ Variant Comparison::execute(const Object& object) const {
 	return Variant();
 }
 
+Variant Function::execute(const Object& object) const {
+	// TODO
+	return Variant();
+}
+
 
 void Aggregate::update(const Object& object) {
 	// nothing
@@ -164,6 +169,11 @@ std::string Comparison::as_string() const {
 		case op_type_e::GREATER:		return (L ? L->as_string() : "?") + " > " + (R ? R->as_string() : "?");
 		case op_type_e::GREATER_EQUAL:	return (L ? L->as_string() : "?") + " >= " + (R ? R->as_string() : "?");
 	}
+	return "?";
+}
+
+std::string Function::as_string() const {
+	// TODO
 	return "?";
 }
 

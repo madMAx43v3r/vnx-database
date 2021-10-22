@@ -1,0 +1,12 @@
+package vnx.query;
+
+enum func_type_e {
+	
+	ADD,
+	SUB,
+	MUL,
+	DIV,
+	MIN,
+	MAX
+	
+}

@@ -1,0 +1,16 @@
+package vnx.query;
+
+import vnx.Variant;
+import vnx.Object;
+
+class Function extends Expression {
+	
+	func_type_e type;
+	
+	vector<Expression*> args;
+	
+	Variant execute(Object object) const;
+	
+	string as_string() const;
+	
+}
