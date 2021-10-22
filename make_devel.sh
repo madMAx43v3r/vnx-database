@@ -4,7 +4,7 @@ mkdir -p build
 
 cd build
 
-cmake -D CMAKE_CXX_FLAGS="-g -O3 -fmax-errors=1" ..
+cmake -D CMAKE_CXX_FLAGS="-fmax-errors=1" -D CMAKE_BUILD_TYPE="RelWithDebInfo" ..
 
 make -j8 $@
 

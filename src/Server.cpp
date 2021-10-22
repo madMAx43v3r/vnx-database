@@ -2,9 +2,12 @@
 #include <vnx/database/Server.h>
 #include <vnx/database/Root.hxx>
 #include <vnx/database/Table.hxx>
+#include <vnx/query/query.h>
 
 #include <vnx/Request.hxx>
 #include <vnx/Generic.hxx>
+
+#include <sqltoast/sqltoast.h>
 
 
 namespace vnx {
@@ -131,6 +134,288 @@ std::shared_ptr<const vnx::Return> Server::handle(std::shared_ptr<const vnx::Req
 	return Super::handle(request);
 }
 
+std::string to_string(const sqltoast::lexeme_t& word) {
+	return std::string(word.start, word.end);
+}
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::numeric_term_t* value) {
+	if(!value) {
+		throw std::logic_error("!value");
+	}
+	std::shared_ptr<const query::Expression> out;
+	// TODO
+	return out;
+}
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::value_expression_t* value);
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::value_expression_primary_t* value) {
+	if(!value) {
+		throw std::logic_error("!value");
+	}
+	std::shared_ptr<const query::Expression> out;
+	switch(value->vep_type) {
+		case sqltoast::VEP_TYPE_COLUMN_REFERENCE: {
+			auto field = query::Field::create();
+			field->name = to_string(value->lexeme);
+			out = field;
+			break;
+		}
+		case sqltoast::VEP_TYPE_UNSIGNED_VALUE_SPECIFICATION: {
+			auto spec = static_cast<const sqltoast::unsigned_value_specification_t*>(value);
+			switch(spec->uvs_type) {
+				case sqltoast::UVS_TYPE_UNSIGNED_NUMERIC:
+				case sqltoast::UVS_TYPE_CHARACTER_STRING:
+				case sqltoast::UVS_TYPE_NATIONAL_CHARACTER_STRING: {
+					auto result = query::Value::create();
+					vnx::from_string(to_string(value->lexeme), result->data);
+					out = result;
+					break;
+				}
+				default:
+					throw std::logic_error("unsupported value type");
+			}
+			break;
+		}
+		case sqltoast::VEP_TYPE_SET_FUNCTION_SPECIFICATION: {
+			auto function = static_cast<const sqltoast::set_function_t*>(value);
+			switch(function->func_type) {
+				case sqltoast::SET_FUNCTION_TYPE_COUNT: out = query::Count::create(); break;
+				case sqltoast::SET_FUNCTION_TYPE_AVG: {
+					auto avg = query::Average::create();
+					avg->A = to_expression(function->value.get());
+					out = avg;
+					break;
+				}
+				case sqltoast::SET_FUNCTION_TYPE_SUM: {
+					auto avg = query::Sum::create();
+					avg->A = to_expression(function->value.get());
+					out = avg;
+					break;
+				}
+				case sqltoast::SET_FUNCTION_TYPE_MIN: {
+					auto avg = query::Min::create();
+					avg->A = to_expression(function->value.get());
+					out = avg;
+					break;
+				}
+				case sqltoast::SET_FUNCTION_TYPE_MAX: {
+					auto avg = query::Max::create();
+					avg->A = to_expression(function->value.get());
+					out = avg;
+					break;
+				}
+				default:
+					throw std::logic_error("unsupported function");
+			}
+			break;
+		}
+		default:
+			throw std::logic_error("invalid expression primary");
+	}
+	return out;
+}
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::value_expression_t* value) {
+	if(!value) {
+		throw std::logic_error("!value");
+	}
+	std::shared_ptr<const query::Expression> out;
+	switch(value->type) {
+		case sqltoast::VALUE_EXPRESSION_TYPE_STRING_EXPRESSION: {
+			auto ex = static_cast<const sqltoast::character_value_expression_t*>(value);
+			for(const auto& value : ex->values) {
+				if(auto primary = value->primary.get()) {
+					if(auto value = primary->value.get()) {
+						auto next = to_expression(value);
+						if(out) {
+							throw std::logic_error("string concatenation not supported");
+						} else {
+							out = next;
+						}
+					} else if(auto func = primary->string_function.get()) {
+						throw std::logic_error("string functions not supported");
+					}
+				}
+			}
+			break;
+		}
+		case sqltoast::VALUE_EXPRESSION_TYPE_NUMERIC_EXPRESSION: {
+			auto ex = static_cast<const sqltoast::numeric_expression*>(value);
+			auto comp = query::Comparison::create();
+			comp->L = to_expression(ex->left.get());
+			comp->R = to_expression(ex->right.get());
+			switch(ex->op) {
+				default:
+					throw std::logic_error("unsupported numeric expression");
+			}
+		}
+		// TODO
+	}
+	return out;
+}
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::row_value_constructor_t* value) {
+	if(!value) {
+		throw std::logic_error("!value");
+	}
+	std::shared_ptr<const query::Expression> out;
+	switch(value->rvc_type) {
+		case sqltoast::RVC_TYPE_ELEMENT: {
+			auto element = static_cast<const sqltoast::row_value_constructor_element_t*>(value);
+			switch(element->rvc_element_type) {
+				case sqltoast::RVC_ELEMENT_TYPE_VALUE_EXPRESSION: {
+					auto value = static_cast<const sqltoast::row_value_expression_t*>(element);
+					out = to_expression(value);
+					break;
+				}
+				default:
+					throw std::logic_error("unsupported row-value constructor element");
+			}
+			break;
+		}
+		default:
+			throw std::logic_error("unsupported row-value constructor");
+	}
+	return out;
+}
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::predicate_t* predicate) {
+	if(!predicate) {
+		throw std::logic_error("!predicate");
+	}
+	std::shared_ptr<const query::Expression> out;
+	switch(predicate->predicate_type) {
+		case sqltoast::PREDICATE_TYPE_COMPARISON: {
+			auto pred = static_cast<const sqltoast::comp_predicate_t*>(predicate);
+			auto comp = query::Comparison::create();
+			comp->L = to_expression(pred->left.get());
+			comp->R = to_expression(pred->right.get());
+			switch(pred->op) {
+				case sqltoast::COMP_OP_EQUAL: comp->type = query::op_type_e::EQUAL; break;
+				case sqltoast::COMP_OP_NOT_EQUAL: comp->type = query::op_type_e::NOT_EQUAL; break;
+				case sqltoast::COMP_OP_GREATER: comp->type = query::op_type_e::GREATER; break;
+				case sqltoast::COMP_OP_GREATER_EQUAL: comp->type = query::op_type_e::GREATER_EQUAL; break;
+				case sqltoast::COMP_OP_LESS: comp->type = query::op_type_e::LESS; break;
+				case sqltoast::COMP_OP_LESS_EQUAL: comp->type = query::op_type_e::LESS_EQUAL; break;
+				default:
+					throw std::logic_error("invalid comparison operator");
+			}
+			out = comp;
+			break;
+		}
+	}
+	return out;
+}
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::search_condition_t* condition);
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::boolean_term_t* term) {
+	if(!term) {
+		throw std::logic_error("!term");
+	}
+	std::shared_ptr<const query::Expression> out;
+	if(auto factor = term->factor.get()) {
+		if(auto primary = term->factor->primary.get()) {
+			if(auto predicate = primary->predicate.get()) {
+				out = to_expression(predicate);
+			} else if(auto next = primary->search_condition.get()) {
+				out = to_expression(next);
+			}
+		}
+		if(factor->reverse_op) {
+			auto inv = query::Unary::create();
+			inv->X = out;
+			inv->type = query::op_type_e::NOT;
+			out = inv;
+		}
+	}
+	if(auto next = term->and_operand.get()) {
+		auto comp = query::Comparison::create();
+		comp->L = out;
+		comp->R = to_expression(next);
+		comp->type = query::op_type_e::AND;
+		out = comp;
+	}
+	return out;
+}
+
+std::shared_ptr<const query::Expression> to_expression(const sqltoast::search_condition_t* condition) {
+	if(!condition) {
+		throw std::logic_error("!condition");
+	}
+	std::shared_ptr<const query::Expression> out;
+	for(const auto& term : condition->terms) {
+		auto next = to_expression(term.get());
+		if(out) {
+			auto comp = query::Comparison::create();
+			comp->L = out;
+			comp->R = next;
+			comp->type = query::op_type_e::OR;
+			out = comp;
+		} else {
+			out = next;
+		}
+	}
+	return out;
+}
+
+std::vector<Object> Server::sql_query(const std::string& query) const {
+	sqltoast::parse_input_t subject(query.cbegin(), query.cend());
+	const sqltoast::parse_result_t res = sqltoast::parse(subject);
+	if(res.code != sqltoast::PARSE_OK) {
+		throw std::runtime_error("SQL parse failed: " + res.error);
+	}
+	std::vector<Object> out;
+	for(const auto& statement : res.statements) {
+		switch(statement->type) {
+			case sqltoast::STATEMENT_TYPE_SELECT: {
+				query::Select new_query;
+				auto stmt = static_cast<const sqltoast::select_statement_t*>(statement.get());
+				if(auto query = stmt->query.get()) {
+					int index = 0;
+					for(const auto& field : query->selected_columns) {
+						auto ex = to_expression(field.value.get());
+						auto alias = to_string(field.alias);
+						if(alias.empty()) {
+							alias = "_" + std::to_string(index);
+						}
+						if(auto agg = std::dynamic_pointer_cast<const query::Aggregate>(ex)) {
+							new_query.aggregates[alias] = agg;
+						} else {
+							new_query.fields[alias] = ex;
+						}
+						index++;
+					}
+					if(auto from = query->table_expression.get()) {
+						for(const auto& ref : from->referenced_tables) {
+							switch(ref->type) {
+								case sqltoast::TABLE_REFERENCE_TYPE_TABLE: {
+									auto table = static_cast<const sqltoast::table_t*>(ref.get());
+									new_query.from = to_string(table->table_name);
+									break;
+								}
+							}
+						}
+						if(auto where = from->where_condition.get()) {
+							new_query.where = to_expression(where);
+						}
+					}
+				}
+				log(INFO) << new_query.as_string();
+				const auto rows = select(new_query);
+				out.insert(out.end(), rows.begin(), rows.end());
+				break;
+			}
+		}
+	}
+	return out;
+}
+
+void Server::sql_update(const std::string& query) {
+	//
+}
+
 Object aggregate(const query::Select& query, const std::vector<Object>& result) {
 	std::map<std::string, std::shared_ptr<query::Aggregate>> funcs;
 	for(const auto& entry : query.aggregates) {
@@ -184,15 +469,15 @@ std::vector<Object> Server::select(const query::Select& query) const {
 				result.push_back(std::move(object));
 			}
 		}
-	} else {
-		if(!query.aggregates.empty()) {
-			if(!query.fields.empty()) {
-				throw std::logic_error("cannot have fields in aggregate mode");
-			}
-			Object object = aggregate(query, result);
-			result.clear();
-			result.push_back(std::move(object));
+	}
+	else if(!query.aggregates.empty())
+	{
+		if(!query.fields.empty()) {
+			throw std::logic_error("cannot have fields in aggregate mode");
 		}
+		Object object = aggregate(query, result);
+		result.clear();
+		result.push_back(std::move(object));
 	}
 	if(query.order_by) {
 		std::multimap<Variant, Object> index;

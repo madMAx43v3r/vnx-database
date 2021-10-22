@@ -25,6 +25,10 @@ protected:
 	
 	std::shared_ptr<const vnx::Return> handle(std::shared_ptr<const vnx::Request> request) override;
 	
+	std::vector<Object> sql_query(const std::string& query) const;
+
+	void sql_update(const std::string& query);
+
 	std::vector<Object> select(const query::Select& query) const override;
 	
 	void update(const query::Update& query) override;

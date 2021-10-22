@@ -14,6 +14,11 @@ module Server {
 	bool ignore_errors = false;			// if to ignore data corruption on load
 	
 	
+	vector<Object> sql_query(string query) const;
+	
+	void sql_update(string query);
+	
+	
 	vector<Object> select(vnx.query.Select query) const;
 	
 	void update(vnx.query.Update query);

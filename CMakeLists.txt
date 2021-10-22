@@ -1,12 +1,13 @@
 cmake_minimum_required(VERSION 3.8)
 project(vnx-database)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -pthread -Wno-deprecated-declarations")
 
 add_subdirectory(query)
+add_subdirectory(sqltoast)
 
 file(GLOB GENERATED_SOURCE_FILES generated/src/*.cpp)
 
@@ -19,10 +20,12 @@ target_include_directories(vnx_database
 	PUBLIC
 		include
 		generated/include
+	PRIVATE
+		sqltoast/libsqltoast/include
 )
 
 target_link_libraries(vnx_database
-	vnx_query vnx_base
+	vnx_query vnx_base sqltoast
 )
 
 add_executable(vnx_database_server src/vnx_database_server.cpp)

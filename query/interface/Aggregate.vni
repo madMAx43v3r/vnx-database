@@ -3,7 +3,7 @@ package vnx.query;
 import vnx.Variant;
 import vnx.Object;
 
-class Aggregate {
+class Aggregate extends Expression {
 	
 	void update(Object object);
 	
