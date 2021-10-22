@@ -20,33 +20,31 @@ Variant Value::execute(const Object& object) const {
 }
 
 Variant Unary::execute(const Object& object) const {
-	if(!X) {
-		throw std::logic_error("execute(): !X");
-	}
-	const Variant tmp = X->execute(object);
-	switch(type) {
-		case op_type_e::NOT:		return Variant(!bool(tmp));
-		case op_type_e::IS_NULL:	return Variant(tmp.is_null());
-		case op_type_e::NOT_NULL:	return Variant(!tmp.is_null());
+	if(X) {
+		const Variant tmp = X->execute(object);
+		switch(type) {
+			case op_type_e::NOT:		return Variant(!bool(tmp));
+			case op_type_e::IS_NULL:	return Variant(tmp.is_null());
+			case op_type_e::NOT_NULL:	return Variant(!tmp.is_null());
+		}
 	}
 	return Variant();
 }
 
 Variant Comparison::execute(const Object& object) const {
-	if(!bool(L) || !bool(R)) {
-		throw std::logic_error("execute(): !L || !R");
-	}
-	const Variant lhs = L->execute(object);
-	const Variant rhs = R->execute(object);
-	switch(type) {
-		case op_type_e::AND:			return Variant(bool(lhs) && bool(rhs));
-		case op_type_e::OR:				return Variant(bool(lhs) || bool(rhs));
-		case op_type_e::EQUAL:			return Variant(lhs == rhs);
-		case op_type_e::NOT_EQUAL:		return Variant(lhs != rhs);
-		case op_type_e::LESS:			return Variant(lhs < rhs);
-		case op_type_e::LESS_EQUAL:		return Variant(lhs <= rhs);
-		case op_type_e::GREATER:		return Variant(lhs > rhs);
-		case op_type_e::GREATER_EQUAL:	return Variant(lhs >= rhs);
+	if(L && R) {
+		const Variant lhs = L->execute(object);
+		const Variant rhs = R->execute(object);
+		switch(type) {
+			case op_type_e::AND:			return Variant(bool(lhs) && bool(rhs));
+			case op_type_e::OR:				return Variant(bool(lhs) || bool(rhs));
+			case op_type_e::EQUAL:			return Variant(lhs == rhs);
+			case op_type_e::NOT_EQUAL:		return Variant(lhs != rhs);
+			case op_type_e::LESS:			return Variant(lhs < rhs);
+			case op_type_e::LESS_EQUAL:		return Variant(lhs <= rhs);
+			case op_type_e::GREATER:		return Variant(lhs > rhs);
+			case op_type_e::GREATER_EQUAL:	return Variant(lhs >= rhs);
+		}
 	}
 	return Variant();
 }
@@ -62,40 +60,36 @@ void Aggregate::update(const Object& object) {
 }
 
 void Min::update(const Object& object) {
-	if(!A) {
-		throw std::logic_error("update(): !A");
-	}
-	const Variant tmp = A->execute(object);
-	if(result.empty() || tmp < result) {
-		result = tmp;
+	if(A) {
+		const Variant tmp = A->execute(object);
+		if(result.empty() || tmp < result) {
+			result = tmp;
+		}
 	}
 }
 
 void Max::update(const Object& object) {
-	if(!A) {
-		throw std::logic_error("update(): !A");
-	}
-	const Variant tmp = A->execute(object);
-	if(result.empty() || tmp > result) {
-		result = tmp;
+	if(A) {
+		const Variant tmp = A->execute(object);
+		if(result.empty() || tmp > result) {
+			result = tmp;
+		}
 	}
 }
 
 void Sum::update(const Object& object) {
-	if(!A) {
-		throw std::logic_error("update(): !A");
+	if(A) {
+		result += A->execute(object).to<float64_t>();
 	}
-	result += A->execute(object).to<float64_t>();
 }
 
 void Average::update(const Object& object) {
-	if(!A) {
-		throw std::logic_error("update(): !A");
-	}
-	const Variant value = A->execute(object);
-	if(!value.empty()) {
-		sum += value.to<float64_t>();
-		count++;
+	if(A) {
+		const Variant value = A->execute(object);
+		if(!value.empty()) {
+			sum += value.to<float64_t>();
+			count++;
+		}
 	}
 }
 
