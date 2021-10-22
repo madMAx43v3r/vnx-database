@@ -23,6 +23,7 @@ public:
 	std::string location = "data/";
 	std::string id_name = "id";
 	int64_t max_block_size = 67108864;
+	vnx::bool_t show_queries = false;
 	vnx::bool_t ignore_errors = false;
 	
 	typedef ::vnx::Module Super;

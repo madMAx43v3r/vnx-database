@@ -70,7 +70,7 @@ namespace database {
 
 
 const vnx::Hash64 ServerBase::VNX_TYPE_HASH(0x3e27b2d3ee41ac7full);
-const vnx::Hash64 ServerBase::VNX_CODE_HASH(0xd8904f711812748ull);
+const vnx::Hash64 ServerBase::VNX_CODE_HASH(0xd892ef8e2c8cd668ull);
 
 ServerBase::ServerBase(const std::string& _vnx_name)
 	:	Module::Module(_vnx_name)
@@ -78,6 +78,7 @@ ServerBase::ServerBase(const std::string& _vnx_name)
 	vnx::read_config(vnx_name + ".location", location);
 	vnx::read_config(vnx_name + ".id_name", id_name);
 	vnx::read_config(vnx_name + ".max_block_size", max_block_size);
+	vnx::read_config(vnx_name + ".show_queries", show_queries);
 	vnx::read_config(vnx_name + ".ignore_errors", ignore_errors);
 }
 
@@ -99,7 +100,8 @@ void ServerBase::accept(vnx::Visitor& _visitor) const {
 	_visitor.type_field(_type_code->fields[0], 0); vnx::accept(_visitor, location);
 	_visitor.type_field(_type_code->fields[1], 1); vnx::accept(_visitor, id_name);
 	_visitor.type_field(_type_code->fields[2], 2); vnx::accept(_visitor, max_block_size);
-	_visitor.type_field(_type_code->fields[3], 3); vnx::accept(_visitor, ignore_errors);
+	_visitor.type_field(_type_code->fields[3], 3); vnx::accept(_visitor, show_queries);
+	_visitor.type_field(_type_code->fields[4], 4); vnx::accept(_visitor, ignore_errors);
 	_visitor.type_end(*_type_code);
 }
 
@@ -108,6 +110,7 @@ void ServerBase::write(std::ostream& _out) const {
 	_out << "\"location\": "; vnx::write(_out, location);
 	_out << ", \"id_name\": "; vnx::write(_out, id_name);
 	_out << ", \"max_block_size\": "; vnx::write(_out, max_block_size);
+	_out << ", \"show_queries\": "; vnx::write(_out, show_queries);
 	_out << ", \"ignore_errors\": "; vnx::write(_out, ignore_errors);
 	_out << "}";
 }
@@ -124,6 +127,7 @@ vnx::Object ServerBase::to_object() const {
 	_object["location"] = location;
 	_object["id_name"] = id_name;
 	_object["max_block_size"] = max_block_size;
+	_object["show_queries"] = show_queries;
 	_object["ignore_errors"] = ignore_errors;
 	return _object;
 }
@@ -138,6 +142,8 @@ void ServerBase::from_object(const vnx::Object& _object) {
 			_entry.second.to(location);
 		} else if(_entry.first == "max_block_size") {
 			_entry.second.to(max_block_size);
+		} else if(_entry.first == "show_queries") {
+			_entry.second.to(show_queries);
 		}
 	}
 }
@@ -152,6 +158,9 @@ vnx::Variant ServerBase::get_field(const std::string& _name) const {
 	if(_name == "max_block_size") {
 		return vnx::Variant(max_block_size);
 	}
+	if(_name == "show_queries") {
+		return vnx::Variant(show_queries);
+	}
 	if(_name == "ignore_errors") {
 		return vnx::Variant(ignore_errors);
 	}
@@ -165,6 +174,8 @@ void ServerBase::set_field(const std::string& _name, const vnx::Variant& _value)
 		_value.to(id_name);
 	} else if(_name == "max_block_size") {
 		_value.to(max_block_size);
+	} else if(_name == "show_queries") {
+		_value.to(show_queries);
 	} else if(_name == "ignore_errors") {
 		_value.to(ignore_errors);
 	} else {
@@ -196,7 +207,7 @@ std::shared_ptr<vnx::TypeCode> ServerBase::static_create_type_code() {
 	auto type_code = std::make_shared<vnx::TypeCode>();
 	type_code->name = "vnx.database.Server";
 	type_code->type_hash = vnx::Hash64(0x3e27b2d3ee41ac7full);
-	type_code->code_hash = vnx::Hash64(0xd8904f711812748ull);
+	type_code->code_hash = vnx::Hash64(0xd892ef8e2c8cd668ull);
 	type_code->is_native = true;
 	type_code->native_size = sizeof(::vnx::database::ServerBase);
 	type_code->methods.resize(25);
@@ -225,7 +236,7 @@ std::shared_ptr<vnx::TypeCode> ServerBase::static_create_type_code() {
 	type_code->methods[22] = ::vnx::database::Server_truncate::static_get_type_code();
 	type_code->methods[23] = ::vnx::database::Server_get_table_info::static_get_type_code();
 	type_code->methods[24] = ::vnx::database::Server_write_new_block::static_get_type_code();
-	type_code->fields.resize(4);
+	type_code->fields.resize(5);
 	{
 		auto& field = type_code->fields[0];
 		field.is_extended = true;
@@ -249,6 +260,13 @@ std::shared_ptr<vnx::TypeCode> ServerBase::static_create_type_code() {
 	}
 	{
 		auto& field = type_code->fields[3];
+		field.data_size = 1;
+		field.name = "show_queries";
+		field.value = vnx::to_string(false);
+		field.code = {31};
+	}
+	{
+		auto& field = type_code->fields[4];
 		field.data_size = 1;
 		field.name = "ignore_errors";
 		field.value = vnx::to_string(false);
@@ -471,6 +489,9 @@ void read(TypeInput& in, ::vnx::database::ServerBase& value, const TypeCode* typ
 			vnx::read_value(_buf + _field->offset, value.max_block_size, _field->code.data());
 		}
 		if(const auto* const _field = type_code->field_map[3]) {
+			vnx::read_value(_buf + _field->offset, value.show_queries, _field->code.data());
+		}
+		if(const auto* const _field = type_code->field_map[4]) {
 			vnx::read_value(_buf + _field->offset, value.ignore_errors, _field->code.data());
 		}
 	}
@@ -496,9 +517,10 @@ void write(TypeOutput& out, const ::vnx::database::ServerBase& value, const Type
 	else if(code && code[0] == CODE_STRUCT) {
 		type_code = type_code->depends[code[1]];
 	}
-	char* const _buf = out.write(9);
+	char* const _buf = out.write(10);
 	vnx::write_value(_buf + 0, value.max_block_size);
-	vnx::write_value(_buf + 8, value.ignore_errors);
+	vnx::write_value(_buf + 8, value.show_queries);
+	vnx::write_value(_buf + 9, value.ignore_errors);
 	vnx::write(out, value.location, type_code, type_code->fields[0].code.data());
 	vnx::write(out, value.id_name, type_code, type_code->fields[1].code.data());
 }
